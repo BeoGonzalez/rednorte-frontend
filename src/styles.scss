@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+// src/styles.scss
+:root {
+  --norte-primary: #004a99;    // Azul institucional
+  --norte-secondary: #00c2cb;  // Cyan (tecnología/salud)
+  --norte-bg: #f8fafc;         // Fondo suave
+  --norte-text: #1e293b;       // Gris oscuro para lectura
+  --norte-accent: #ef4444;     // Rojo (para urgencias/alertas)
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--norte-bg);
+  color: var(--norte-text);
+}
