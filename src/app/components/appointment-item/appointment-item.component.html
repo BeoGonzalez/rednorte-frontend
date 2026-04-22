@@ -1,0 +1,23 @@
+<div class="appointment-row">
+  <div class="appointment-row__time-block">
+    <div class="time-badge">
+      <span class="time-badge__label">{{ appointment().label }}</span>
+      <span class="time-badge__value">{{ appointment().time }}</span>
+    </div>
+  </div>
+
+  <div class="appointment-row__info">
+    <h3 class="appointment-row__name">{{ appointment().patientName }}</h3>
+    <div class="appointment-row__tags">
+      <span class="tag tag--primary">{{ appointment().appointmentType }}</span>
+      <span class="tag tag--neutral">{{ appointment().status }}</span>
+    </div>
+  </div>
+
+  <div class="appointment-row__action">
+    <button class="btn-outline" (click)="callToBox()">
+      <span class="material-symbols-outlined">campaign</span>
+      Llamar a Box
+    </button>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+.dashboard-layout {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #00346f; /* primary */
+    margin: 0;
+  }
+
+  &__subtitle {
+    color: #737783; /* outline */
+    margin-top: 0.5rem;
+  }
+}
+
+/* Glass Card Definition de tu DESIGN.md */
+.card-glass {
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 1rem; /* 16px */
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e7e8ef; /* light gray-blue divider */
+    padding-bottom: 1rem;
+
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #191c21;
+      margin: 0;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.link-primary {
+  color: #255dad; /* surface-tint */
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #737783;
+}

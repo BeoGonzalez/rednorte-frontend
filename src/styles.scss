@@ -1,8 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 // src/styles.scss
 :root {
+  --norte-glass-bg: rgba(255, 255, 255, 0.7);
+  --norte-glass-blur: blur(12px);
+  --norte-shadow-premium: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
   --norte-primary: #004a99;    // Azul institucional
   --norte-secondary: #00c2cb;  // Cyan (tecnología/salud)
+  --norte-tertiary: #833301;   // Cafe 
+  --norte-neutral: #75777D;    // Gris neutral
   --norte-bg: #f8fafc;         // Fondo suave
   --norte-text: #1e293b;       // Gris oscuro para lectura
   --norte-accent: #ef4444;     // Rojo (para urgencias/alertas)
