@@ -1,0 +1,26 @@
+<section class="hero">
+  <div class="orbes-container">
+    <div class="orb orb--primario"></div>
+    <div class="orb orb--secundario"></div>
+  </div>
+
+  <div class="glass-content">
+    <h1 class="glass-content__titulo">
+      {{ tituloAnimado() }}<span class="cursor-parpadeante">|</span>
+    </h1>
+    
+    <div class="glass-content__fade-in" [class.visible]="mostrarSubtitulo()">
+      <p class="glass-content__subtitulo">{{ subtitulo() }}</p>
+      
+      <div class="glass-content__acciones">
+        <button class="btn-norte-premium" (click)="onAccion.emit()">
+          <span class="material-symbols-outlined icon">rocket_launch</span>
+          {{ textoBoton() }}
+        </button>
+        <button class="btn-norte-outline">
+          Ver Demostración
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
