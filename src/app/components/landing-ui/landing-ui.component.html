@@ -1,0 +1,47 @@
+<div class="layout-wrapper">
+  <header class="header">
+    <nav class="nav">
+      <div class="logo">
+        <span class="material-icons">health_and_safety</span>
+      </div>
+      <div class="primary-nav">
+        <a *ngFor="let item of navItems" 
+           (click)="onNavClick(item.link)" 
+           class="nav-link">
+          <span class="material-icons">{{ item.icon }}</span>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="main">
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">Gestión Inteligente de <br><span>Listas de Espera</span></h1>
+        <p class="hero-subtitle">
+          Plataforma centralizada basada en microservicios para optimizar la asignación 
+          de citas médicas y mejorar la transparencia con el paciente.
+        </p>
+        <button class="primary-btn" (click)="onLogin()">Ingresar al Portal</button>
+      </div>
+    </div>
+
+    <div class="stats-grid" *ngIf="stats">
+      <div class="stat-card">
+        <h3>{{ stats.pacientesEnEspera | number }}</h3>
+        <p>Pacientes Gestionados</p>
+      </div>
+      
+      <div class="stat-card highlight">
+        <h3>{{ stats.horasReasignadas | number }}</h3>
+        <p>Horas Reasignadas</p>
+      </div>
+      
+      <div class="stat-card">
+        <h3>{{ stats.hospitalesConectados }}</h3>
+        <p>Centros Integrados</p>
+      </div>
+    </div>
+  </main>
+</div>

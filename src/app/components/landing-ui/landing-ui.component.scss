@@ -1,0 +1,290 @@
+// ==========================================
+// Variables de Color Modernas y Tecnológicas
+// ==========================================
+$bg-color: #191a1f;
+$border-color: #404040;
+$text-primary: #ffffff;
+$text-secondary: #acacac;
+$brand-color: #4d90fe;
+
+// Colores para el efecto de olas tecnológicas
+$wave-cyan: #00ffff;
+$wave-blue: #4d90fe;
+$wave-magenta: #ff00ff;
+$wave-purple: #8000ff;
+
+// ==========================================
+// Layout Principal
+// ==========================================
+.layout-wrapper {
+  width: 100vw;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: row;
+  background: $bg-color;
+  color: $text-primary;
+  font-family: 'Google Sans', sans-serif;
+  overscroll-behavior: none;
+  position: relative; // Necesario para posicionar las olas de fondo
+  overflow: hidden; // Oculta las olas que se salen del contenedor
+
+  
+}
+
+// ==========================================
+// Efecto de Olas Tecnológicas (Fondo)
+// ==========================================
+.layout-wrapper::before,
+.layout-wrapper::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 200%; // Más ancho para el movimiento
+  height: 100%;
+  background-repeat: repeat-x;
+  background-position: 0 bottom;
+  transform-origin: center bottom;
+  z-index: 0; // Detrás del contenido
+}
+
+.layout-wrapper::before {
+  // Primera ola: Cyan y azul, más rápida
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 120 28" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:%2300ffff;stop-opacity:0.3" /><stop offset="50%" style="stop-color:%234d90fe;stop-opacity:0.3" /><stop offset="100%" style="stop-color:%2300ffff;stop-opacity:0.3" /></linearGradient></defs><path d="M0 15 C 30 15, 30 5, 60 5 S 90 15, 120 15 V 28 H 0 Z" fill="url(%23g1)"/></svg>');
+  animation: wave 10s linear infinite;
+  opacity: 0.6;
+}
+
+.layout-wrapper::after {
+  // Segunda ola: Magenta y morado, más lenta y desplazada
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 120 28" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:%23ff00ff;stop-opacity:0.2" /><stop offset="50%" style="stop-color:%238000ff;stop-opacity:0.2" /><stop offset="100%" style="stop-color:%23ff00ff;stop-opacity:0.2" /></linearGradient></defs><path d="M0 15 C 30 15, 30 25, 60 25 S 90 15, 120 15 V 28 H 0 Z" fill="url(%23g2)"/></svg>');
+  animation: wave 15s linear infinite reverse; // Movimiento inverso
+  opacity: 0.8;
+  bottom: -5px; // Ligero desfase vertical
+}
+
+// Animación para el movimiento de las olas
+@keyframes wave {
+  0% { transform: translateX(0) translateZ(0) scaleY(1); }
+  50% { transform: translateX(-25%) translateZ(0) scaleY(0.8); } // Ligera deformación
+  100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+}
+
+// Asegurar que el contenido esté por encima de las olas
+.header, .main {
+  position: relative;
+  z-index: 1;
+}
+
+// ==========================================
+// Sidebar / Header
+// ==========================================
+.header {
+  height: 100vh;
+  width: 80px;
+  border-right: 1px solid $border-color;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba($bg-color, 0.8); // Ligeramente transparente para integrarse
+  backdrop-filter: blur(5px); // Efecto de desenfoque de fondo
+}
+
+.nav {
+  height: calc(100% - 32px);
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+}
+
+.logo {
+  margin-bottom: 2rem;
+  .material-icons {
+    font-size: 32px;
+    color: $brand-color;
+    // Resplandor neón tecnológico
+    filter: drop-shadow(0 0 5px $brand-color);
+  }
+}
+
+.primary-nav {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  .nav-link {
+    min-height: 68px;
+    text-decoration: none;
+    color: $text-secondary;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+
+    &:hover {
+      color: $text-primary;
+      // Resplandor al pasar el ratón
+      text-shadow: 0 0 8px rgba($text-primary, 0.8);
+    }
+
+    .material-icons {
+      margin-bottom: 4px;
+    }
+  }
+}
+
+// ==========================================
+// Contenido Principal
+// ==========================================
+.main {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 4rem 6rem;
+  box-sizing: border-box;
+}
+
+.hero-section {
+  max-width: 800px;
+  margin-top: 10vh;
+
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid $border-color;
+    border-radius: 16px;
+    font-size: 12px;
+    color: $text-secondary;
+    margin-bottom: 24px;
+    background-color: rgba($bg-color, 0.5);
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 500;
+    line-height: 1.1;
+    margin: 0 0 24px 0;
+    letter-spacing: -0.02em;
+
+    span {
+      // Gradiente tecnológico moderno en el texto
+      background: linear-gradient(90deg, $wave-cyan, $wave-blue, $wave-magenta);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      // Añadir un resplandor sutil al texto degradado
+      filter: drop-shadow(0 0 2px rgba($wave-blue, 0.5));
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: $text-secondary;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 600px;
+  }
+
+  .primary-btn {
+    background-color: $brand-color;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background-color 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      background-color: #357ae8;
+      // Resplandor neón en el botón
+      box-shadow: 0 0 15px rgba($brand-color, 0.7);
+    }
+  }
+}
+
+.stats-grid {
+  display: flex;
+  gap: 24px;
+  margin-top: 80px;
+
+  .stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 24px;
+    min-width: 200px;
+    backdrop-filter: blur(3px); // Ligero desenfoque en las tarjetas
+
+    &.highlight {
+      border-color: rgba($wave-blue, 0.3);
+      background: rgba($wave-blue, 0.05);
+      // Resplandor sutil de borde para la tarjeta destacada
+      box-shadow: 0 0 10px rgba($wave-blue, 0.2);
+
+      h3 {
+        color: $wave-cyan;
+        text-shadow: 0 0 5px rgba($wave-cyan, 0.5);
+      }
+    }
+
+    h3 {
+      font-size: 2.5rem;
+      margin: 0 0 8px 0;
+      font-weight: 400;
+    }
+
+    p {
+      color: $text-secondary;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// ==========================================
+// Media Queries (Responsivo)
+// ==========================================
+@media (max-width: 768px) {
+  .layout-wrapper { flex-direction: column; }
+  .header {
+    height: 60px;
+    min-height: 60px;
+    width: 100vw;
+    border-right: none;
+    border-bottom: 1px solid $border-color;
+  }
+  .nav {
+    height: 100%;
+    width: 100%;
+    padding: 0 16px;
+    flex-direction: row;
+    box-sizing: border-box;
+    align-items: center;
+  }
+  .logo {
+    margin-bottom: 0;
+    margin-right: auto;
+  }
+  .primary-nav {
+    flex-direction: row;
+    gap: 20px;
+    .nav-link {
+      min-height: 0;
+      flex-direction: row;
+      gap: 8px;
+      .nav-label { display: none; }
+      .material-icons { margin-bottom: 0; }
+    }
+  }
+  .main { padding: 2rem; }
+  .hero-section .hero-title { font-size: 2.5rem; }
+  .stats-grid { flex-direction: column; }
+}

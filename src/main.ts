@@ -1,6 +1,9 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { App } from './app/app';
+// 1. Cambiamos App por AppComponent
+import { AppComponent } from './app/app'; 
+// 2. Importamos las rutas (si es que tu main.ts las maneja directamente aquí o usa un app.config)
+import { appConfig } from './app/app.config'; 
 
-bootstrapApplication(App, appConfig)
+// 3. Inicializamos usando AppComponent
+bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));

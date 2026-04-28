@@ -1,0 +1,6 @@
+<app-landing-ui
+  [stats]="(stats$ | async) || null"
+  [navItems]="navItems"
+  (loginClick)="handleLogin()"
+  (navClick)="handleNavNavigation($event)">
+</app-landing-ui>
