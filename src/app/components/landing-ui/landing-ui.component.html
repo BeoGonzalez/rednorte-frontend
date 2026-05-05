@@ -1,47 +1,120 @@
 <div class="layout-wrapper">
-  <header class="header">
-    <nav class="nav">
-      <div class="logo">
-        <span class="material-icons">health_and_safety</span>
+  <!-- Video Fijo de Fondo -->
+  <video class="background-video" autoplay loop muted playsinline>
+    <source src="https://res.cloudinary.com/dww0ubvj2/video/upload/w_1920,f_auto,q_auto:best/v1777992741/Fluid_Motion_Animation_A_mesmeric_digital_landscape_of_flowing_Mnu0ZR5c_r3d1of.mp4" type="video/mp4" />
+  </video>
+  <div class="video-overlay"></div>
+
+  <!-- Navbar -->
+  <header class="top-nav">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="brand-name">RedNorte.</span>
       </div>
-      <div class="primary-nav">
-        <a *ngFor="let item of navItems" 
-           (click)="onNavClick(item.link)" 
-           class="nav-link">
-          <span class="material-icons">{{ item.icon }}</span>
-          <span class="nav-label">{{ item.label }}</span>
-        </a>
+      <div class="nav-links">
+        @for (item of navItems(); track item.label; let i = $index) {
+          <a (click)="navClick.emit(item.link)" class="nav-link" [style.--anim-order]="i">
+            <span class="material-icons">{{ item.icon }}</span>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        }
       </div>
-    </nav>
+      <div class="nav-actions">
+        <button class="btn-ghost" (click)="loginClick.emit()">Iniciar Sesión</button>
+        <button class="btn-login" (click)="registerClick.emit()">Registrarse</button>
+      </div>
+    </div>
   </header>
 
-  <main class="main">
-    <div class="hero-section">
-      <div class="hero-content">
-        <h1 class="hero-title">Gestión Inteligente de <br><span>Listas de Espera</span></h1>
-        <p class="hero-subtitle">
-          Plataforma centralizada basada en microservicios para optimizar la asignación 
-          de citas médicas y mejorar la transparencia con el paciente.
-        </p>
-        <button class="primary-btn" (click)="onLogin()">Ingresar al Portal</button>
+  <!-- Contenido Deslizable -->
+  <main class="main-content">
+    
+    <section class="hero-section">
+      <h1 class="hero-title animate-up" style="--anim-delay: 0.1s">Gestión Inteligente de <br /><span>Listas de Espera</span></h1>
+      <p class="hero-subtitle animate-up" style="--anim-delay: 0.2s">
+        Plataforma centralizada basada en microservicios. Asignación algorítmica de citas médicas y
+        control total de la infraestructura hospitalaria.
+      </p>
+      
+      <div class="hero-actions animate-up" style="--anim-delay: 0.3s">
+        <button class="btn-primary shimmer-effect" (click)="registerClick.emit()">
+          Comenzar
+          <span class="material-icons">rocket_launch</span>
+        </button>
       </div>
-    </div>
 
-    <div class="stats-grid" *ngIf="stats">
-      <div class="stat-card">
-        <h3>{{ stats.pacientesEnEspera | number }}</h3>
-        <p>Pacientes Gestionados</p>
+      @if (stats(); as currentStats) {
+        <div class="stats-grid">
+          <div class="stat-card animate-stagger" style="--anim-order: 0">
+            <div class="stat-icon"><span class="material-icons">groups</span></div>
+            <h3>{{ currentStats.pacientesEnEspera | number }}</h3>
+            <p>Pacientes Gestionados</p>
+          </div>
+          <div class="stat-card highlight animate-stagger" style="--anim-order: 1">
+            <div class="stat-icon"><span class="material-icons">update</span></div>
+            <h3>{{ currentStats.horasReasignadas | number }}</h3>
+            <p>Horas Reasignadas</p>
+          </div>
+          <div class="stat-card animate-stagger" style="--anim-order: 2">
+            <div class="stat-icon"><span class="material-icons">domain</span></div>
+            <h3>{{ currentStats.hospitalesConectados }}</h3>
+            <p>Centros Integrados</p>
+          </div>
+        </div>
+      }
+    </section>
+
+    <section class="features-section">
+      <div class="section-header animate-up">
+        <h2>Arquitectura de <span>Alto Nivel</span></h2>
+        <p>Diseñado para escalar. Construido para optimizar la salud pública en la región.</p>
       </div>
       
-      <div class="stat-card highlight">
-        <h3>{{ stats.horasReasignadas | number }}</h3>
-        <p>Horas Reasignadas</p>
+      <div class="features-grid">
+        @for (feat of features(); track feat.title; let i = $index) {
+          <div class="feature-card glass-panel animate-stagger" [style.--anim-order]="i">
+            <div class="icon-wrapper"><span class="material-icons">{{ feat.icon }}</span></div>
+            <h4>{{ feat.title }}</h4>
+            <p>{{ feat.desc }}</p>
+            <div class="glow-effect"></div>
+          </div>
+        }
       </div>
-      
-      <div class="stat-card">
-        <h3>{{ stats.hospitalesConectados }}</h3>
-        <p>Centros Integrados</p>
+    </section>
+
+    <section class="workflow-section">
+      <div class="section-header animate-up">
+        <h2>Flujo Operativo <span>Automatizado</span></h2>
       </div>
-    </div>
+
+      <div class="workflow-grid">
+        @for (step of steps(); track step.num; let i = $index) {
+          <div class="step-card glass-panel animate-stagger" [style.--anim-order]="i">
+            <div class="step-number">{{ step.num }}</div>
+            <h4>{{ step.title }}</h4>
+            <p>{{ step.desc }}</p>
+            <div class="glow-effect"></div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <footer class="glass-footer">
+      <div class="footer-content">
+        <div class="brand-col">
+          <span class="brand-name">RedNorte.</span>
+          <p>Innovación tecnológica para la red de salud. Operando para todo el territorio nacional.</p>
+        </div>
+        <div class="links-col">
+          <h4>Plataforma</h4>
+          <a>Documentación API</a>
+          <a>Soporte Técnico</a>
+          <a>Estado del Sistema</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Sistema Nominal RedNorte. Todos los derechos reservados.</p>
+      </div>
+    </footer>
   </main>
 </div>

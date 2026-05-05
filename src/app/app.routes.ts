@@ -1,10 +1,23 @@
 import { Routes } from '@angular/router';
 
-// IMPORTAMOS EL SMART COMPONENT (EL CONTAINER), NO EL UI.
-// Asegúrate de que la ruta sea la correcta hacia tu carpeta containers
-import { LandingPageComponent } from './containers/landing-page/landing-page.component';
-
 export const routes: Routes = [
-  { path: '', component: LandingPageComponent },
-  // ... resto de tus rutas
+  {
+    path: '',
+    loadComponent: () => import('./containers/landing-page/landing-page.component').then(m => m.LandingPageComponent)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./containers/login/login.component').then(m => m.LoginComponent)
+  },
+  // Comentamos la ruta de registro hasta que creemos los archivos físicos
+  /*
+  {
+    path: 'registro',
+    loadComponent: () => import('./containers/registro/registro.component').then(m => m.RegistroComponent)
+  },
+  */
+  { 
+    path: '**', 
+    redirectTo: '' 
+  }
 ];

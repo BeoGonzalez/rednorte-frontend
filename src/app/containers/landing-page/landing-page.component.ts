@@ -1,42 +1,51 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-
-// Importamos el UI que acabamos de crear arriba
-import { LandingUiComponent, RedNorteStats, NavItem } from '../../components/landing-ui/landing-ui.component';
+import { LandingUiComponent } from '../../components/landing-ui/landing-ui.component';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [CommonModule, LandingUiComponent],
-  templateUrl: './landing-page.component.html'
+  imports: [LandingUiComponent],
+  template: `
+    <app-landing-ui
+      [navItems]="menuOptions()"
+      [stats]="dashboardStats()"
+      (navClick)="handleNavigation($event)"
+      (loginClick)="handleLogin()"
+      (registerClick)="handleRegister()"> 
+    </app-landing-ui>
+  `
 })
 export class LandingPageComponent implements OnInit {
-  
-  stats$!: Observable<RedNorteStats>;
-  
-  navItems: NavItem[] = [
-    { icon: 'home', label: 'Inicio', link: '/' },
-    { icon: 'search', label: 'Consultar', link: '/portal' },
-    { icon: 'admin_panel_settings', label: 'Admin', link: '/auth' }
-  ];
+  private router = inject(Router);
 
-  constructor(private router: Router) {}
+  // Rutas a tus microservicios
+  menuOptions = signal([
+    { icon: 'home', label: 'Inicio', link: '/' },
+    { icon: 'personal_injury', label: 'Pacientes', link: '/pacientes' },
+    { icon: 'format_list_numbered', label: 'Lista de Espera', link: '/lista-espera' }
+  ]);
+
+  // Datos simulados (luego vendrán de tu API Gateway)
+  dashboardStats = signal({
+    pacientesEnEspera: 15420,
+    horasReasignadas: 4850,
+    hospitalesConectados: 18
+  });
 
   ngOnInit(): void {
-    this.stats$ = of({
-      pacientesEnEspera: 12450,
-      horasReasignadas: 3204,
-      hospitalesConectados: 12
-    });
+    // Lógica inicial si la necesitas
+  }
+
+  handleNavigation(route: string): void {
+    this.router.navigate([route]);
   }
 
   handleLogin(): void {
-    console.log('Navegando a login...');
+    this.router.navigate(['/login']);
   }
 
-  handleNavNavigation(link: string): void {
-    console.log('Navegando a:', link);
+  handleRegister(): void {
+    this.router.navigate(['/registro']);
   }
 }

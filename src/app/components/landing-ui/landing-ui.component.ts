@@ -1,24 +1,33 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common'; // <-- ESTO ARREGLA EL *ngIf, *ngFor y | number
-
-export interface RedNorteStats { pacientesEnEspera: number; horasReasignadas: number; hospitalesConectados: number; }
-export interface NavItem { icon: string; label: string; link: string; }
+import { Component, input, output, ChangeDetectionStrategy, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-landing-ui',
   standalone: true,
-  imports: [CommonModule], // <-- TIENE QUE ESTAR AQUÍ
+  imports: [CommonModule],
   templateUrl: './landing-ui.component.html',
-  styleUrls: ['./landing-ui.component.scss'], // Ojo: asegúrate de que el nombre coincida con tu archivo scss
+  styleUrls: ['./landing-ui.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LandingUiComponent {
-  @Input() stats: RedNorteStats | null = null;
-  @Input() navItems: NavItem[] = [];
-  
-  @Output() loginClick = new EventEmitter<void>();
-  @Output() navClick = new EventEmitter<string>();
+  // Inputs usando Signals
+  navItems = input<any[]>([]);
+  stats = input<any>(null);
 
-  onLogin(): void { this.loginClick.emit(); }
-  onNavClick(link: string): void { this.navClick.emit(link); }
+  // Outputs modernos para eventos
+  navClick = output<string>();
+  loginClick = output<void>();
+  registerClick = output<void>();
+
+  features = signal([
+    { icon: 'memory', title: 'Motor Algorítmico', desc: 'Asignación inteligente de horas médicas basada en prioridad clínica y tiempos de espera.' },
+    { icon: 'api', title: 'Microservicios Core', desc: 'Arquitectura escalable en la nube que garantiza 99.9% de uptime para la red.' },
+    { icon: 'security', title: 'Seguridad Nominal', desc: 'Encriptación de extremo a extremo para proteger los datos sensibles de los pacientes.' }
+  ]);
+
+  steps = signal([
+    { num: '01', title: 'Ingreso al Sistema', desc: 'El hospital o CESFAM registra al paciente en la Lista de Espera central.' },
+    { num: '02', title: 'Análisis Triage', desc: 'El algoritmo clasifica la urgencia y busca disponibilidad en la red.' },
+    { num: '03', title: 'Asignación Exitosa', desc: 'Notificación automática de la cita médica agendada al paciente.' }
+  ]);
 }

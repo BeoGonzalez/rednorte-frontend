@@ -1,0 +1,87 @@
+<div class="login-wrapper">
+  <!-- Video de Fondo desde CDN (Continuidad visual) -->
+  <video class="background-video" autoplay loop muted playsinline>
+  <source src="https://res.cloudinary.com/dww0ubvj2/video/upload/w_1920,f_auto,q_auto:best/v1777992741/Fluid_Motion_Animation_A_mesmeric_digital_landscape_of_flowing_Mnu0ZR5c_r3d1of.mp4" type="video/mp4" />
+</video>
+  <div class="video-overlay"></div>
+
+  <!-- Botón Volver -->
+  <button class="btn-back" (click)="goBack()">
+    <span class="material-icons">arrow_back</span>
+    Volver al Inicio
+  </button>
+
+  <!-- Tarjeta de Login Glassmorphism -->
+  <main class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h2>Iniciar Sesión</h2>
+        <p>Ingresa tus credenciales para acceder a la red hospitalaria.</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        
+        <!-- Campo: Email -->
+        <div class="form-group">
+          <label for="email">Correo Institucional</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">mail</span>
+            <input 
+              id="email" 
+              type="email" 
+              formControlName="email" 
+              placeholder="ejemplo@rednorte.cl"
+              [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+            />
+          </div>
+          @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+            <span class="error-text">El correo es obligatorio.</span>
+          }
+          @if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+            <span class="error-text">Formato de correo inválido.</span>
+          }
+        </div>
+
+        <!-- Campo: Contraseña -->
+        <div class="form-group">
+          <label for="password">Contraseña Nominal</label>
+          <div class="input-wrapper">
+            <span class="material-icons input-icon">lock</span>
+            <input 
+              id="password" 
+              [type]="isPasswordVisible() ? 'text' : 'password'" 
+              formControlName="password" 
+              placeholder="••••••••"
+              [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            />
+            <button type="button" class="btn-toggle-pass" (click)="togglePasswordVisibility()">
+              <span class="material-icons">{{ isPasswordVisible() ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+          </div>
+          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+            <span class="error-text">La contraseña es obligatoria.</span>
+          }
+        </div>
+
+        <!-- Opciones Extra -->
+        <div class="form-options">
+          <label class="checkbox-container">
+            <input type="checkbox" />
+            <span class="checkmark"></span>
+            Recordar sesión
+          </label>
+          <a href="#" class="forgot-link">¿Olvidaste tu clave?</a>
+        </div>
+
+        <!-- Botón Submit -->
+        <button type="submit" class="btn-submit" [disabled]="isLoading()">
+          @if (isLoading()) {
+            <span class="spinner"></span> Procesando...
+          } @else {
+            Ingresar al Portal
+          }
+        </button>
+      </form>
+    </div>
+  </main>
+</div>
