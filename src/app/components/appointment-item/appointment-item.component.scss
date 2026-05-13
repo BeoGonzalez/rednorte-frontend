@@ -61,40 +61,4 @@
   }
 }
 
-.tag {
-  padding: 0.125rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.625rem;
-  font-weight: 500;
-
-  &--primary {
-    background-color: rgba(0, 105, 110, 0.1); /* secondary at low opacity */
-    color: #00696e; /* secondary */
-  }
-
-  &--neutral {
-    color: #737783; /* outline */
-  }
-}
-
-.btn-outline {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem; /* 8px */
-  background-color: #ededf5; /* surface-variant equivalent */
-  color: #424751;
-  border: none;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: rgba(37, 93, 173, 0.1); /* hover state */
-  }
-  
-  &:active {
-    transform: scale(0.98); /* Mencionada en DESIGN.md */
-  }
-}
+// Estilos extraídos a ButtonComponent y TagComponent

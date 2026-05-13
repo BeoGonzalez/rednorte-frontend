@@ -1,0 +1,246 @@
+// Variables del Tema (Estilo Dark / Neon Cyan)
+:host {
+  --primary: #00f2fe;         // Cyan Neon de tu landing
+  --primary-dark: #008c99;    
+  --primary-light: rgba(0, 242, 254, 0.1);
+  --secondary: #4facfe;       // Azul secundario
+  --bg-page: #0f172a;         // Fondo global oscuro (ajusta si tu contenedor usa otro)
+  --bg-card: #1e293b;         // Fondo de las tarjetas (un poco más claro que la página)
+  --text-main: #f8fafc;       // Texto blanco
+  --text-muted: #94a3b8;      // Texto gris claro
+  --border-glow: rgba(0, 242, 254, 0.25); // Borde iluminado
+  --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.08); // Efecto de luz en lugar de sombra
+  --blood: #ef4444;           // Rojo
+  --blood-light: rgba(239, 68, 68, 0.15);
+  --radius-lg: 20px;
+}
+
+// Contenedor principal
+.patient-dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--text-main);
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+// ----------------------------------------
+// 1. Tarjeta de Cabecera (El Perfil)
+// ----------------------------------------
+.profile-header-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glow);
+  box-shadow: var(--shadow-glow);
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.15);
+  }
+
+  // Gradiente tecnológico oscuro
+  .cover-gradient {
+    height: 140px;
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.15) 0%, rgba(0, 242, 254, 0.05) 100%);
+    border-bottom: 1px solid var(--border-glow);
+  }
+
+  .profile-content {
+    padding: 0 2.5rem 2.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin-top: -50px;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .avatar-wrapper {
+    width: 110px;
+    height: 110px;
+    background: var(--bg-card);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--primary);
+    box-shadow: 0 0 20px var(--primary-light); // Glow en el avatar
+
+    .material-icons {
+      font-size: 60px;
+      color: var(--primary);
+    }
+  }
+
+  .info-wrapper {
+    flex: 1;
+    padding-bottom: 0.5rem;
+
+    .patient-name {
+      margin: 0 0 0.75rem 0;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .tags-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      @media (max-width: 600px) {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// Etiquetas (Badges)
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+
+  .badge-icon { font-size: 18px; }
+
+  &.badge-primary { 
+    background: var(--primary-light); 
+    color: var(--primary); 
+    border-color: rgba(0, 242, 254, 0.3);
+  }
+  &.badge-blood { 
+    background: var(--blood-light); 
+    color: var(--blood);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+}
+
+// ----------------------------------------
+// 2. Cuadrícula de Acciones
+// ----------------------------------------
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.action-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.05); // Borde casi invisible
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 0 30px var(--primary-light); // Glow al hacer hover
+  }
+
+  .card-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid var(--border-glow);
+
+    .material-icons { font-size: 32px; }
+    
+    // Variante para el historial médico
+    &.teal-glow { 
+      background: rgba(13, 148, 136, 0.15); 
+      color: #2dd4bf; 
+      border-color: rgba(45, 212, 191, 0.3);
+    } 
+  }
+
+  .card-text {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    p {
+      margin: 0 0 2rem 0;
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 1.05rem;
+
+      strong { color: var(--primary); font-weight: 700; }
+    }
+  }
+}
+
+// ----------------------------------------
+// 3. Botones Neón
+// ----------------------------------------
+.btn-modern {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+
+  .material-icons { font-size: 22px; }
+
+  &.btn-primary {
+    background: var(--primary);
+    color: #000000; // Letra negra para contrastar con el botón brillante
+    box-shadow: 0 0 15px var(--primary-light);
+
+    &:hover {
+      background: #00e0eb;
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5); // Resplandor intenso
+      transform: scale(1.02);
+    }
+  }
+
+  &.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+
+    &:hover {
+      background: var(--primary-light);
+      box-shadow: 0 0 15px var(--primary-light);
+    }
+  }
+}
+
+// Animación de entrada
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

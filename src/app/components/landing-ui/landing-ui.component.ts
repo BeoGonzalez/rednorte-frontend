@@ -1,10 +1,12 @@
 import { Component, input, output, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { CardComponent } from '../../shared/ui/card/card.component';
 
 @Component({
   selector: 'app-landing-ui',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent, CardComponent],
   templateUrl: './landing-ui.component.html',
   styleUrls: ['./landing-ui.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
