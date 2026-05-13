@@ -1,26 +1,6 @@
-<main class="dashboard-layout">
-  <header class="dashboard-layout__header">
-    <h1 class="dashboard-layout__title">Hola, {{ doctorName() }}</h1>
-    <p class="dashboard-layout__subtitle">Aquí está el resumen de tu jornada de hoy.</p>
-  </header>
-
-  <section class="dashboard-layout__content">
-    <div class="card-glass">
-      <div class="card-glass__header">
-        <h2>Próximas Citas</h2>
-        <a href="#" class="link-primary">Ver agenda completa</a>
-      </div>
-      
-      <div class="card-glass__list">
-        @for (appointment of upcomingAppointments(); track appointment.id) {
-          <app-appointment-item 
-            [appointment]="appointment"
-            (onCallBox)="handleCallToBox($event)">
-          </app-appointment-item>
-        } @empty {
-          <div class="empty-state">No tienes más pacientes en espera hoy.</div>
-        }
-      </div>
-    </div>
-  </section>
-</main>
+<select class="neon-select" (change)="loadWaitingList('BUSCANDO_CITA', $any($event.target).value)">
+  <option value="MEDICINA_GENERAL">Medicina General</option>
+  <option value="CARDIOLOGIA">Cardiología</option>
+  <option value="PEDIATRIA">Pediatría</option>
+  <option value="TRAUMATOLOGIA">Traumatología</option>
+</select>

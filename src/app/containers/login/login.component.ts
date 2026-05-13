@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http'; // Importación para el backend real
 
 @Component({
   selector: 'app-login',
@@ -14,14 +15,16 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private http = inject(HttpClient); // Inyectamos HTTP
 
   // Estado UI
   isPasswordVisible = signal<boolean>(false);
   isLoading = signal<boolean>(false);
+  errorMessage = signal<string>(''); // Para mostrar errores reales
 
-  // Formulario Reactivo Blindado
+  // Formulario Reactivo Blindado (Ahora con username)
   loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.minLength(4)]], // Quitamos Validators.email
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
@@ -33,20 +36,21 @@ export class LoginComponent {
     this.router.navigate(['/']);
   }
 
-  onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
+
+onSubmit(): void {
+  this.http.post<any>('http://localhost:8080/bff/auth/login', this.loginForm.value).subscribe({
+  next: (res) => {
+    localStorage.setItem('jwt_token', res.token);
+    const payload = JSON.parse(atob(res.token.split('.')[1]));
+    
+    // 🔴 Redirección inteligente por ROL
+    if (payload.rol === 'ROLE_MEDICO') {
+      this.router.navigate(['/dashboard-medico']);
+    } else {
+      this.router.navigate(['/portal-pacientes']);
     }
-
-    this.isLoading.set(true);
-
-    // Simulamos un retraso de red (Fake Backend)
-    setTimeout(() => {
-      console.log('Credenciales válidas (Simuladas):', this.loginForm.value);
-      this.isLoading.set(false);
-      // Aquí a futuro harás: this.authService.login(...) y luego rediriges al Dashboard
-      // this.router.navigate(['/dashboard']);
-    }, 1500);
-  }
+  },
+  error: () => this.errorMessage.set('Credenciales inválidas')
+})
+}
 }

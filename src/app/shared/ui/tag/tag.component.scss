@@ -1,0 +1,15 @@
+.tag-base {
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 500;
+
+  &.tag--primary {
+    background-color: rgba(0, 105, 110, 0.1); /* secondary at low opacity */
+    color: #00696e; /* secondary */
+  }
+
+  &.tag--neutral {
+    color: #737783; /* outline */
+  }
+}

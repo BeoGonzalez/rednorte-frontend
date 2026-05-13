@@ -9,15 +9,15 @@
   <div class="appointment-row__info">
     <h3 class="appointment-row__name">{{ appointment().patientName }}</h3>
     <div class="appointment-row__tags">
-      <span class="tag tag--primary">{{ appointment().appointmentType }}</span>
-      <span class="tag tag--neutral">{{ appointment().status }}</span>
+      <app-tag variant="primary">{{ appointment().appointmentType }}</app-tag>
+      <app-tag variant="neutral">{{ appointment().status }}</app-tag>
     </div>
   </div>
 
   <div class="appointment-row__action">
-    <button class="btn-outline" (click)="callToBox()">
+    <app-button variant="outline" (onClick)="callToBox()">
       <span class="material-symbols-outlined">campaign</span>
       Llamar a Box
-    </button>
+    </app-button>
   </div>
 </div>

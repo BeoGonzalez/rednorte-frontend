@@ -20,8 +20,8 @@
         }
       </div>
       <div class="nav-actions">
-        <button class="btn-ghost" (click)="loginClick.emit()">Iniciar Sesión</button>
-        <button class="btn-login" (click)="registerClick.emit()">Registrarse</button>
+        <app-button variant="ghost" (onClick)="loginClick.emit()">Iniciar Sesión</app-button>
+        <app-button variant="login" (onClick)="registerClick.emit()">Registrarse</app-button>
       </div>
     </div>
   </header>
@@ -37,29 +37,29 @@
       </p>
       
       <div class="hero-actions animate-up" style="--anim-delay: 0.3s">
-        <button class="btn-primary shimmer-effect" (click)="registerClick.emit()">
+        <app-button variant="primary" (onClick)="registerClick.emit()">
           Comenzar
           <span class="material-icons">rocket_launch</span>
-        </button>
+        </app-button>
       </div>
 
       @if (stats(); as currentStats) {
         <div class="stats-grid">
-          <div class="stat-card animate-stagger" style="--anim-order: 0">
+          <app-card class="stat-card animate-stagger" style="--anim-order: 0">
             <div class="stat-icon"><span class="material-icons">groups</span></div>
             <h3>{{ currentStats.pacientesEnEspera | number }}</h3>
             <p>Pacientes Gestionados</p>
-          </div>
-          <div class="stat-card highlight animate-stagger" style="--anim-order: 1">
+          </app-card>
+          <app-card class="stat-card highlight animate-stagger" style="--anim-order: 1">
             <div class="stat-icon"><span class="material-icons">update</span></div>
             <h3>{{ currentStats.horasReasignadas | number }}</h3>
             <p>Horas Reasignadas</p>
-          </div>
-          <div class="stat-card animate-stagger" style="--anim-order: 2">
+          </app-card>
+          <app-card class="stat-card animate-stagger" style="--anim-order: 2">
             <div class="stat-icon"><span class="material-icons">domain</span></div>
             <h3>{{ currentStats.hospitalesConectados }}</h3>
             <p>Centros Integrados</p>
-          </div>
+          </app-card>
         </div>
       }
     </section>
@@ -72,12 +72,11 @@
       
       <div class="features-grid">
         @for (feat of features(); track feat.title; let i = $index) {
-          <div class="feature-card glass-panel animate-stagger" [style.--anim-order]="i">
+          <app-card class="feature-card animate-stagger" [style.--anim-order]="i">
             <div class="icon-wrapper"><span class="material-icons">{{ feat.icon }}</span></div>
             <h4>{{ feat.title }}</h4>
             <p>{{ feat.desc }}</p>
-            <div class="glow-effect"></div>
-          </div>
+          </app-card>
         }
       </div>
     </section>
@@ -89,12 +88,11 @@
 
       <div class="workflow-grid">
         @for (step of steps(); track step.num; let i = $index) {
-          <div class="step-card glass-panel animate-stagger" [style.--anim-order]="i">
+          <app-card class="step-card animate-stagger" [style.--anim-order]="i">
             <div class="step-number">{{ step.num }}</div>
             <h4>{{ step.title }}</h4>
             <p>{{ step.desc }}</p>
-            <div class="glow-effect"></div>
-          </div>
+          </app-card>
         }
       </div>
     </section>

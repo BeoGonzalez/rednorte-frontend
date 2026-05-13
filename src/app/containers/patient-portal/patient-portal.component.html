@@ -1,0 +1,12 @@
+<div class="portal-layout">
+  @if (isLoading()) {
+    <div class="loading-spinner">Cargando tu información de salud...</div>
+  } @else if (patientData()) {
+    <app-patient-profile-ui 
+      [patient]="patientData()" 
+      (onSchedule)="handleScheduleAppointment()">
+    </app-patient-profile-ui>
+  } @else {
+    <div class="error-msg">No se pudo cargar la información.</div>
+  }
+</div>

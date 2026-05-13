@@ -61,67 +61,6 @@ $brand-purple: #4facfe;
     display: flex;
     align-items: center;
     gap: 0.8rem;
-
-    // 1. Botón Iniciar Sesión (Cristal Premium)
-    .btn-ghost {
-      background: transparent;
-      color: $text-secondary;
-      border: 1px solid transparent;
-      padding: 0.6rem 1.2rem;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        color: $text-primary;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
-        text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-      }
-    }
-
-    // 2. Botón Registrarse (Neón con reflejo de luz)
-    .btn-login {
-      position: relative;
-      background: linear-gradient(135deg, rgba($brand-purple, 0.15), rgba($brand-cyan, 0.15));
-      color: $text-primary;
-      border: 1px solid rgba($brand-cyan, 0.4);
-      padding: 0.6rem 1.8rem;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      cursor: pointer;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 4px 15px rgba($brand-cyan, 0.1);
-
-      // El rayo de luz invisible que espera a la izquierda
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0; left: -150%;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-        transform: skewX(-25deg);
-        transition: left 0.5s ease-in-out;
-      }
-
-      &:hover {
-        transform: translateY(-2px);
-        background: linear-gradient(135deg, rgba($brand-purple, 0.3), rgba($brand-cyan, 0.3));
-        border-color: $brand-cyan;
-        box-shadow: 0 8px 25px rgba($brand-cyan, 0.4);
-        text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-
-        // Al hacer hover, el rayo atraviesa el botón
-        &::before {
-          left: 150%;
-        }
-      }
-    }
   }
 }
 
@@ -156,39 +95,18 @@ section { width: 100%; max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; di
   .hero-badge { display: inline-block; padding: 0.4rem 1rem; border-radius: 999px; background: rgba($brand-cyan, 0.1); border: 1px solid rgba($brand-cyan, 0.3); color: $brand-cyan; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 2rem; }
   .hero-title { font-size: clamp(2.5rem, 6vw, 5.5rem); font-weight: 800; line-height: 1.1; margin: 0 0 1.5rem; letter-spacing: -0.04em; span { background: linear-gradient(135deg, $brand-cyan, $brand-purple); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px rgba($brand-purple, 0.4)); } }
   .hero-subtitle { font-size: clamp(1rem, 2vw, 1.25rem); color: $text-secondary; line-height: 1.7; margin: 0 auto 2.5rem; max-width: 700px; }
-  
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, $brand-purple, $brand-cyan); color: #fff; border: none; padding: 1.1rem 2.5rem; font-size: 1.1rem; font-weight: 700; border-radius: 999px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 10px 30px rgba($brand-purple, 0.3); margin-bottom: 5rem;
-    &:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 40px rgba($brand-cyan, 0.5); }
-    &.shimmer-effect {
-      position: relative; overflow: hidden;
-      &::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); transform: rotate(45deg) translateX(-100%); animation: shimmer 3s infinite; }
-    }
-  }
-}
-@keyframes shimmer { 100% { transform: rotate(45deg) translateX(100%); } }
-
-// ==========================================
-// Tarjetas de Cristal Mágicas (Glass Panels)
-// ==========================================
-.glass-panel {
-  position: relative; background: $glass-bg; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid $glass-border; border-radius: 1.5rem; padding: 2.5rem; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s; box-shadow: 0 15px 35px rgba(0,0,0,0.2); overflow: hidden;
-  
-  .glow-effect { position: absolute; width: 150px; height: 150px; background: radial-gradient(circle, rgba($brand-cyan, 0.15) 0%, transparent 70%); top: -50px; right: -50px; border-radius: 50%; opacity: 0; transition: opacity 0.4s; pointer-events: none; }
-  
-  &:hover {
-    transform: translateY(-10px); border-color: rgba($brand-cyan, 0.4); box-shadow: 0 20px 50px rgba($brand-cyan, 0.15);
-    .glow-effect { opacity: 1; }
-  }
 }
 
+// ==========================================
+// Tarjetas de Cristal Mágicas (Removido, ahora usan CardComponent)
+// ==========================================
 // ==========================================
 // Grillas (Stats, Features, Workflow)
 // ==========================================
 .stats-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; width: 100%;
   .stat-card {
-    @extend .glass-panel; padding: 2rem;
+    padding: 2rem;
     .stat-icon { width: 50px; height: 50px; border-radius: 14px; background: rgba(255, 255, 255, 0.05); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; border: 1px solid $glass-border; transition: 0.3s; .material-icons { color: $text-secondary; font-size: 24px; } }
     &.highlight { background: rgba($brand-purple, 0.05); border-color: rgba($brand-cyan, 0.3); .stat-icon { background: rgba($brand-cyan, 0.1); border-color: rgba($brand-cyan, 0.4); .material-icons { color: $brand-cyan; } } h3 { color: #fff; } }
     h3 { font-size: 2.8rem; font-weight: 800; margin: 0 0 0.5rem; letter-spacing: -1px; }
