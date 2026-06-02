@@ -1,6 +1,16 @@
-<select class="neon-select" (change)="loadWaitingList('BUSCANDO_CITA', $any($event.target).value)">
-  <option value="MEDICINA_GENERAL">Medicina General</option>
-  <option value="CARDIOLOGIA">Cardiología</option>
-  <option value="PEDIATRIA">Pediatría</option>
-  <option value="TRAUMATOLOGIA">Traumatología</option>
-</select>
+<div class="dashboard-wrapper">
+  <header>
+    <h1>Panel Médico - Base de Datos de Pacientes</h1>
+  </header>
+
+  <ng-container *ngIf="state$ | async as state">
+    
+    <app-patient-profile-ui
+      [pacientes]="state.pacientes"
+      [isLoading]="state.loading"
+      [errorMessage]="state.error"
+      (verDetalle)="handleVerDetalle($event)">
+    </app-patient-profile-ui>
+
+  </ng-container>
+</div>
