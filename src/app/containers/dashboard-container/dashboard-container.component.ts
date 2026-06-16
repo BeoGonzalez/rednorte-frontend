@@ -8,7 +8,7 @@ import { WaitingListService } from '../../core/services/waiting-list.service';
 @Component({
   selector: 'app-dashboard-container',
   standalone: true,
-  imports: [CommonModule, AppointmentItemComponent],
+  imports: [CommonModule],
   templateUrl: './dashboard-container.component.html',
   styleUrls: ['./dashboard-container.component.scss']
 })
@@ -74,7 +74,7 @@ export class DashboardContainerComponent implements OnInit {
 
   // 🟢 Función unificada para gestionar solicitudes (Aceptar/Rechazar)
   gestionarSolicitud(id: string, nuevoEstado: string) {
-    this.waitingListService.updateSolicitud(id, { estado: nuevoEstado }).subscribe({
+    this.waitingListService.updateSolicitud(Number(id), { estado: nuevoEstado }).subscribe({
       next: () => {
         alert(`Paciente ${nuevoEstado}`);
         this.loadWaitingList('BUSCANDO_CITA', this.selectedEspecialidad());
