@@ -1,28 +1,38 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { RegistroSolicitud, SolicitudResponse } from '../../models/waiting-list.models';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class WaitingListService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/bff/listas-espera'; 
+  
+  // 🟢 IMPORTANTE: Usamos la ruta exacta que definimos en el Gateway y Controller
+  private baseUrl = '/api/listas-espera';
 
-  getWaitingList(estado: string, tipoCita: string): Observable<any[]> {
-    const params = new HttpParams().set('estado', estado).set('tipoCita', tipoCita);
-    return this.http.get<any[]>(`${this.apiUrl}/filtrar`, { params });
+  /**
+   * Endpoint para que el Paciente se anote en la lista.
+   * Requiere ROLE_PACIENTE.
+   */
+  registrarSolicitud(solicitud: RegistroSolicitud): Observable<SolicitudResponse> {
+    return this.http.post<SolicitudResponse>(this.baseUrl, solicitud);
   }
 
-  // 🔴 Métodos para que el Médico gestione la lista
-  updateSolicitud(id: string, payload: any): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}`, payload);
+  /**
+   * Endpoint para que el Médico vea la lista priorizada.
+   * Requiere ROLE_MEDICO.
+   */
+  getListaPriorizada(): Observable<SolicitudResponse[]> {
+    return this.http.get<SolicitudResponse[]>(this.baseUrl);
   }
 
-  eliminarSolicitud(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
-  }
-
-  // 🔴 Método para que el Paciente pida cita
-  registrarSolicitud(solicitud: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/registro`, solicitud);
+  /**
+   * Endpoint para ver el detalle de una solicitud específica.
+   * Requiere ROLE_PACIENTE o ROLE_MEDICO.
+   */
+  getSolicitudById(id: number): Observable<SolicitudResponse> {
+    return this.http.get<SolicitudResponse>(`${this.baseUrl}/${id}`);
   }
 }

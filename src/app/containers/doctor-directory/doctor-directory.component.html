@@ -1,0 +1,49 @@
+<div class="directory-wrapper">
+  <div class="header-section">
+    <div>
+      <h1>Médicos Especialistas</h1>
+      <p>Directorio de profesionales disponibles para derivación desde listas de espera.</p>
+    </div>
+    <div class="search-box">
+      <span class="icon">🔍</span>
+      <input 
+        type="text" 
+        [(ngModel)]="filtroEspecialidad" 
+        (keyup)="filtrar()" 
+        placeholder="Buscar por especialidad (ej. Cardiología)...">
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-state">
+    <div class="spinner"></div>
+    <p>Cargando disponibilidad médica...</p>
+  </div>
+
+  <div *ngIf="!cargando" class="doctors-grid">
+    <div *ngFor="let doc of doctoresFiltrados" class="doctor-card">
+      <div class="card-header">
+        <div class="avatar">
+          {{ doc.nombre.charAt(0) | uppercase }}
+        </div>
+        <div class="status-badge" [ngClass]="{'available': doc.disponibilidad !== false, 'busy': doc.disponibilidad === false}">
+          {{ doc.disponibilidad !== false ? 'Disponible' : 'En Consulta' }}
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <h3>Dr(a). {{ doc.nombre }}</h3>
+        <span class="specialty">{{ doc.especialidad }}</span>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-primary" [disabled]="doc.disponibilidad === false">
+          Asignar Paciente
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="doctoresFiltrados.length === 0" class="empty-state">
+      <p>No se encontraron especialistas para esta búsqueda.</p>
+    </div>
+  </div>
+</div>
