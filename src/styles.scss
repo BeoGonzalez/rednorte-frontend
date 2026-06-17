@@ -1,21 +1,69 @@
-/* You can add global styles to this file, and also import other style files */
-// src/styles.scss
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+// ─────────────────────────────────────────────────────────────
+//  RedNorte — Design System Tokens
+//  HealthTech SaaS · Light Theme
+// ─────────────────────────────────────────────────────────────
 :root {
-  --norte-glass-bg: rgba(255, 255, 255, 0.7);
-  --norte-glass-blur: blur(12px);
-  --norte-shadow-premium: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-  --norte-primary: #004a99;    // Azul institucional
-  --norte-secondary: #00c2cb;  // Cyan (tecnología/salud)
-  --norte-tertiary: #833301;   // Cafe 
-  --norte-neutral: #75777D;    // Gris neutral
-  --norte-bg: #f8fafc;         // Fondo suave
-  --norte-text: #1e293b;       // Gris oscuro para lectura
-  --norte-accent: #ef4444;     // Rojo (para urgencias/alertas)
+  // ── Primary — Medical Tech Blue ──────────────────────────────
+  --clr-primary:          #2563eb;
+  --clr-primary-hover:    #1d4ed8;
+  --clr-primary-light:    #eff6ff;
+  --clr-primary-muted:    rgba(37, 99, 235, 0.10);
+  --clr-primary-border:   rgba(37, 99, 235, 0.22);
+
+  // ── Backgrounds ──────────────────────────────────────────────
+  --clr-bg:               #f1f5f9;
+  --clr-surface:          #ffffff;
+  --clr-surface-2:        #f8fafc;
+
+  // ── Text ─────────────────────────────────────────────────────
+  --clr-text:             #0f172a;
+  --clr-text-secondary:   #64748b;
+  --clr-text-placeholder: #94a3b8;
+
+  // ── Borders ──────────────────────────────────────────────────
+  --clr-border:           #e2e8f0;
+  --clr-border-hover:     #cbd5e1;
+
+  // ── Status — Success ─────────────────────────────────────────
+  --clr-success:          #16a34a;
+  --clr-success-bg:       #f0fdf4;
+  --clr-success-border:   rgba(22, 163, 74, 0.25);
+
+  // ── Status — Error ───────────────────────────────────────────
+  --clr-error:            #dc2626;
+  --clr-error-bg:         #fef2f2;
+  --clr-error-border:     rgba(220, 38, 38, 0.25);
+
+  // ── Status — Warning ─────────────────────────────────────────
+  --clr-warning:          #d97706;
+  --clr-warning-bg:       #fffbeb;
+  --clr-warning-border:   rgba(217, 119, 6, 0.25);
+
+  // ── Shadows ──────────────────────────────────────────────────
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 10px 24px rgba(15, 23, 42, 0.10), 0 4px 8px rgba(15, 23, 42, 0.04);
+  --shadow-xl: 0 24px 48px rgba(15, 23, 42, 0.14), 0 8px 16px rgba(15, 23, 42, 0.06);
+
+  // ── Border Radii ─────────────────────────────────────────────
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
 }
+
+// ── Reset ─────────────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: 'Inter', sans-serif;
-  background-color: var(--norte-bg);
-  color: var(--norte-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--clr-bg);
+  color: var(--clr-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

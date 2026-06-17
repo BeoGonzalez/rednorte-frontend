@@ -1,10 +1,16 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
+const PUBLIC_PATHS = ['/auth/register', '/auth/login'];
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Obtenemos el token almacenado tras el login
+  const isPublic = PUBLIC_PATHS.some(path => req.url.includes(path));
+
+  if (isPublic) {
+    return next(req);
+  }
+
   const token = localStorage.getItem('access_token');
 
-  // Si existe el token y la petición va hacia nuestra API, lo inyectamos
   if (token && req.url.startsWith('/api')) {
     const authReq = req.clone({
       setHeaders: {
@@ -14,6 +20,5 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(authReq);
   }
 
-  // Si no hay token, la petición pasa directamente
   return next(req);
 };

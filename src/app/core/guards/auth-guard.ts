@@ -5,7 +5,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   
   // Revisamos si el token está guardado en el navegador
-  const token = localStorage.getItem('jwt_token');
+  const token = localStorage.getItem('access_token');
 
   if (token) {
     return true; // El usuario tiene token, lo dejamos pasar

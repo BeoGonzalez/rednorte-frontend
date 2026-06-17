@@ -1,5 +1,353 @@
+// ─────────────────────────────────────────────────────────────
+//  Patient Portal — light HealthTech SaaS layout
+// ─────────────────────────────────────────────────────────────
+
 .portal-layout {
-  background-color: #0a0f1c; /* El color de tu landing page */
+  background: var(--clr-bg);
   min-height: 100vh;
   padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  @media (max-width: 768px) { padding: 1.25rem; gap: 1.25rem; }
+}
+
+// ── Topbar ────────────────────────────────────────────────────
+.portal-topbar {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  color: var(--clr-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+
+  .material-icons { font-size: 18px; }
+
+  &:hover {
+    border-color: var(--clr-error-border);
+    color: var(--clr-error);
+    background: var(--clr-error-bg);
+  }
+}
+
+// ── Loading / error ───────────────────────────────────────────
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin { display: inline-block; animation: spin 1.2s linear infinite; }
+
+.portal-loading,
+.portal-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 5rem 2rem;
+  color: var(--clr-text-secondary);
+  font-size: 1rem;
+
+  .material-icons { font-size: 26px; color: var(--clr-primary); }
+}
+
+.portal-error .material-icons { color: var(--clr-error); }
+
+// ── Notifications card ────────────────────────────────────────
+.notificaciones-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 1.5rem;
+    background: var(--clr-surface-2);
+    border-bottom: 1px solid var(--clr-border);
+
+    .material-icons {
+      font-size: 22px;
+      color: var(--clr-primary);
+    }
+
+    h3 {
+      margin: 0;
+      flex: 1;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--clr-text);
+    }
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.badge {
+  background: var(--clr-primary);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: var(--radius-full);
+  padding: 0.15rem 0.55rem;
+  line-height: 1.5;
+}
+
+.notificaciones-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notificacion-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: var(--clr-surface-2);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    border-color: var(--clr-border-hover);
+    box-shadow: var(--shadow-xs);
+  }
+
+  &--leida { opacity: 0.55; }
+}
+
+.notificacion-icon {
+  font-size: 20px;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+  color: var(--clr-success);
+
+  &--rechazada { color: var(--clr-error); }
+}
+
+.notificacion-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.notificacion-mensaje {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--clr-text);
+}
+
+.notificacion-fecha {
+  font-size: 0.75rem;
+  color: var(--clr-text-secondary);
+}
+
+// ── Submit success alert ──────────────────────────────────────
+.alert-success {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--clr-success-bg);
+  border: 1px solid var(--clr-success-border);
+  border-radius: var(--radius-md);
+  padding: 0.9rem 1.25rem;
+  color: var(--clr-success);
+  font-weight: 500;
+  font-size: 0.9rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+
+  .material-icons { font-size: 20px; }
+}
+
+// ── New appointment form card ─────────────────────────────────
+.form-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 2rem;
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.1rem;
+    border-bottom: 1px solid var(--clr-border);
+
+    .material-icons {
+      font-size: 24px;
+      color: var(--clr-primary);
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--clr-text);
+    }
+  }
+}
+
+// ── Form internals ────────────────────────────────────────────
+.cita-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--clr-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  select {
+    background: var(--clr-surface-2);
+    border: 1.5px solid var(--clr-border);
+    border-radius: var(--radius-md);
+    padding: 0.8rem 2.5rem 0.8rem 0.875rem;
+    color: var(--clr-text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.875rem center;
+
+    &:focus {
+      outline: none;
+      border-color: var(--clr-primary);
+      box-shadow: 0 0 0 3px var(--clr-primary-muted);
+    }
+
+    option { background: var(--clr-surface); }
+  }
+}
+
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--clr-error);
+  background: var(--clr-error-bg);
+  border: 1px solid var(--clr-error-border);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 1rem;
+  font-size: 0.875rem;
+  margin: 0;
+
+  .material-icons { font-size: 18px; }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.875rem;
+  padding-top: 0.5rem;
+
+  @media (max-width: 480px) { flex-direction: column-reverse; }
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.5rem;
+  color: var(--clr-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+
+  &:hover {
+    border-color: var(--clr-border-hover);
+    color: var(--clr-text);
+  }
+}
+
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--clr-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.75rem;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+
+  .material-icons { font-size: 18px; }
+
+  &:hover:not(:disabled) {
+    background: var(--clr-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.38);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
 }

@@ -9,10 +9,11 @@ export interface PacienteRequest {
 // Coincide con PacienteResponseDto.java
 export interface PacienteResponse {
   id: number;
+  authId: number | null;
   rut: string;
   email: string;
   nombre: string;
   apellido: string;
-  estado: string; // En Java es el enum EstadoPaciente
+  estado: string;
   fechaRegistro: string | Date;
 }

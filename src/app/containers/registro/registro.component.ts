@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, signal, inject } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -15,7 +15,7 @@ import { HttpClient } from '@angular/common/http';
 export class RegistroComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   // Estados reactivos para la interfaz de usuario
   isPasswordVisible = signal<boolean>(false);
@@ -51,11 +51,7 @@ export class RegistroComponent {
       rol: this.registroForm.value.rol
     };
 
-    /**
-     * Petición POST al API Gateway (Puerto 8080)
-     * La ruta /api/auth/ coincide con la configuración de tu Gateway
-     */
-    this.http.post<any>('http://localhost:8080/bff/auth/register', payload).subscribe({
+    this.authService.register(payload).subscribe({
       next: (response) => {
         this.isLoading.set(false);
         this.successMessage.set('¡Cuenta creada con éxito! Redirigiendo...');

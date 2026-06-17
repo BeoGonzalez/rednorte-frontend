@@ -1,59 +1,40 @@
-// Variables del Tema (Estilo Dark / Neon Cyan)
-:host {
-  --primary: #00f2fe;         // Cyan Neon de tu landing
-  --primary-dark: #008c99;    
-  --primary-light: rgba(0, 242, 254, 0.1);
-  --secondary: #4facfe;       // Azul secundario
-  --bg-page: #0f172a;         // Fondo global oscuro (ajusta si tu contenedor usa otro)
-  --bg-card: #1e293b;         // Fondo de las tarjetas (un poco más claro que la página)
-  --text-main: #f8fafc;       // Texto blanco
-  --text-muted: #94a3b8;      // Texto gris claro
-  --border-glow: rgba(0, 242, 254, 0.25); // Borde iluminado
-  --shadow-glow: 0 0 20px rgba(0, 242, 254, 0.08); // Efecto de luz en lugar de sombra
-  --blood: #ef4444;           // Rojo
-  --blood-light: rgba(239, 68, 68, 0.15);
-  --radius-lg: 20px;
-}
+// ─────────────────────────────────────────────────────────────
+//  Patient Profile UI — light HealthTech SaaS sub-component
+// ─────────────────────────────────────────────────────────────
 
-// Contenedor principal
 .patient-dashboard {
   max-width: 1000px;
   margin: 0 auto;
+  width: 100%;
   font-family: 'Inter', system-ui, sans-serif;
-  color: var(--text-main);
-  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  color: var(--clr-text);
+  animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-// ----------------------------------------
-// 1. Tarjeta de Cabecera (El Perfil)
-// ----------------------------------------
+// ── Profile header card ───────────────────────────────────────
 .profile-header-card {
-  background: var(--bg-card);
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-glow);
-  box-shadow: var(--shadow-glow);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  margin-bottom: 2.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.25s;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(0, 242, 254, 0.15);
-  }
+  &:hover { box-shadow: var(--shadow-md); }
 
-  // Gradiente tecnológico oscuro
   .cover-gradient {
-    height: 140px;
-    background: linear-gradient(135deg, rgba(79, 172, 254, 0.15) 0%, rgba(0, 242, 254, 0.05) 100%);
-    border-bottom: 1px solid var(--border-glow);
+    height: 100px;
+    background: linear-gradient(135deg, var(--clr-primary-light) 0%, #e0f2fe 100%);
+    border-bottom: 1px solid var(--clr-border);
   }
 
   .profile-content {
-    padding: 0 2.5rem 2.5rem;
+    padding: 0 2rem 1.75rem;
     display: flex;
     align-items: flex-end;
-    gap: 1.5rem;
-    margin-top: -50px;
+    gap: 1.25rem;
+    margin-top: -40px;
 
     @media (max-width: 600px) {
       flex-direction: column;
@@ -63,184 +44,181 @@
   }
 
   .avatar-wrapper {
-    width: 110px;
-    height: 110px;
-    background: var(--bg-card);
+    width: 90px;
+    height: 90px;
+    background: var(--clr-surface);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid var(--primary);
-    box-shadow: 0 0 20px var(--primary-light); // Glow en el avatar
+    border: 3px solid var(--clr-primary);
+    box-shadow: var(--shadow-md);
+    flex-shrink: 0;
 
     .material-icons {
-      font-size: 60px;
-      color: var(--primary);
+      font-size: 46px;
+      color: var(--clr-primary);
     }
   }
 
   .info-wrapper {
     flex: 1;
-    padding-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
 
     .patient-name {
-      margin: 0 0 0.75rem 0;
-      font-size: 2rem;
+      margin: 0 0 0.65rem;
+      font-size: 1.75rem;
       font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--text-main);
+      letter-spacing: -0.025em;
+      color: var(--clr-text);
     }
 
     .tags-container {
       display: flex;
-      gap: 1rem;
+      gap: 0.75rem;
       flex-wrap: wrap;
 
-      @media (max-width: 600px) {
-        justify-content: center;
-      }
+      @media (max-width: 600px) { justify-content: center; }
     }
   }
 }
 
-// Etiquetas (Badges)
+// ── Badges ────────────────────────────────────────────────────
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
-  border-radius: 30px;
-  font-size: 0.9rem;
+  gap: 0.35rem;
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
   font-weight: 600;
   border: 1px solid transparent;
 
-  .badge-icon { font-size: 18px; }
+  .badge-icon { font-size: 16px; }
 
-  &.badge-primary { 
-    background: var(--primary-light); 
-    color: var(--primary); 
-    border-color: rgba(0, 242, 254, 0.3);
+  &.badge-primary {
+    background: var(--clr-primary-light);
+    color: var(--clr-primary);
+    border-color: var(--clr-primary-border);
   }
-  &.badge-blood { 
-    background: var(--blood-light); 
-    color: var(--blood);
-    border-color: rgba(239, 68, 68, 0.3);
+
+  &.badge-blood {
+    background: var(--clr-error-bg);
+    color: var(--clr-error);
+    border-color: var(--clr-error-border);
   }
 }
 
-// ----------------------------------------
-// 2. Cuadrícula de Acciones
-// ----------------------------------------
+// ── Action cards grid ─────────────────────────────────────────
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
 }
 
 .action-card {
-  background: var(--bg-card);
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
   border-radius: var(--radius-lg);
-  padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05); // Borde casi invisible
+  box-shadow: var(--shadow-sm);
+  padding: 1.75rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 
   &:hover {
-    transform: translateY(-8px);
-    border-color: var(--primary);
-    box-shadow: 0 0 30px var(--primary-light); // Glow al hacer hover
+    border-color: var(--clr-primary-border);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
   }
 
   .card-icon-wrapper {
-    width: 64px;
-    height: 64px;
-    border-radius: 20px;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    background: var(--primary-light);
-    color: var(--primary);
-    border: 1px solid var(--border-glow);
+    margin-bottom: 1.25rem;
+    background: var(--clr-primary-light);
+    color: var(--clr-primary);
+    border: 1px solid var(--clr-primary-border);
 
-    .material-icons { font-size: 32px; }
-    
-    // Variante para el historial médico
-    &.teal-glow { 
-      background: rgba(13, 148, 136, 0.15); 
-      color: #2dd4bf; 
-      border-color: rgba(45, 212, 191, 0.3);
-    } 
+    .material-icons { font-size: 26px; }
+
+    &.teal-glow {
+      background: #f0fdfa;
+      color: #0d9488;
+      border-color: rgba(13, 148, 136, 0.22);
+    }
   }
 
   .card-text {
     flex: 1;
 
     h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.4rem;
+      margin: 0 0 0.4rem;
+      font-size: 1.15rem;
       font-weight: 700;
-      color: var(--text-main);
+      color: var(--clr-text);
     }
 
     p {
-      margin: 0 0 2rem 0;
-      color: var(--text-muted);
+      margin: 0 0 1.5rem;
+      color: var(--clr-text-secondary);
       line-height: 1.6;
-      font-size: 1.05rem;
+      font-size: 0.9rem;
 
-      strong { color: var(--primary); font-weight: 700; }
+      strong { color: var(--clr-primary); font-weight: 600; }
     }
   }
 }
 
-// ----------------------------------------
-// 3. Botones Neón
-// ----------------------------------------
+// ── Buttons ───────────────────────────────────────────────────
 .btn-modern {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   width: 100%;
-  padding: 1rem 1.5rem;
-  border-radius: 16px;
+  padding: 0.8rem 1.25rem;
+  border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 0.9rem;
+  font-family: inherit;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
   border: none;
 
-  .material-icons { font-size: 22px; }
+  .material-icons { font-size: 20px; }
 
   &.btn-primary {
-    background: var(--primary);
-    color: #000000; // Letra negra para contrastar con el botón brillante
-    box-shadow: 0 0 15px var(--primary-light);
+    background: var(--clr-primary);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
 
     &:hover {
-      background: #00e0eb;
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5); // Resplandor intenso
-      transform: scale(1.02);
+      background: var(--clr-primary-hover);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.38);
+      transform: translateY(-1px);
     }
   }
 
   &.btn-outline {
     background: transparent;
-    color: var(--primary);
-    border: 2px solid var(--primary);
+    color: var(--clr-primary);
+    border: 1.5px solid var(--clr-primary-border);
 
     &:hover {
-      background: var(--primary-light);
-      box-shadow: 0 0 15px var(--primary-light);
+      background: var(--clr-primary-light);
+      border-color: var(--clr-primary);
     }
   }
 }
 
-// Animación de entrada
+// ── Animation ─────────────────────────────────────────────────
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

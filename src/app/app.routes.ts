@@ -23,5 +23,10 @@ export const routes: Routes = [
     // 🟢 2. Protección con JWT
     canActivate: [authGuard] 
   },
+  {
+    path: 'onboarding',
+    loadComponent: () => import('./containers/onboarding/onboarding.component').then(m => m.OnboardingComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '' }
 ];
