@@ -1,9 +1,9 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Asegúrate de tener CommonModule para el HTML
-import { AppointmentItemComponent } from '../../components/appointment-item/appointment-item.component';
-import { Appointment } from '../../core/models/appointment.model';
-import { PatientService } from '../../core/services/patient.service';
+import { CommonModule } from '@angular/common';
 import { WaitingListService } from '../../core/services/waiting-list.service';
+import { PatientService } from '../../core/services/patient.service';
+import { AuthService } from '../../core/services/auth.service';
+import { SolicitudResponse } from '../../models/waiting-list.models';
 
 @Component({
   selector: 'app-dashboard-container',
@@ -15,71 +15,64 @@ import { WaitingListService } from '../../core/services/waiting-list.service';
 export class DashboardContainerComponent implements OnInit {
   private waitingListService = inject(WaitingListService);
   private patientService = inject(PatientService);
-  
-  // 🟢 ESTADOS (Signals) - Sin duplicados
+  private authService = inject(AuthService);
+
   doctorName = signal<string>('Dr. Mendoza');
-  upcomingAppointments = signal<Appointment[]>([]);
-  waitingPatients = signal<any[]>([]);
+  waitingPatients = signal<SolicitudResponse[]>([]);
   selectedEspecialidad = signal<string>('MEDICINA_GENERAL');
   isLoadingList = signal<boolean>(false);
+  actionError = signal<string>('');
+
+  // Snackbar
+  snackbarVisible = signal<boolean>(false);
+  snackbarMessage = signal<string>('');
+  snackbarType = signal<'success' | 'error'>('success');
+  private snackbarTimer: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit(): void {
-    this.loadAppointments();
-    // 🟢 Llamada corregida con dos argumentos para coincidir con la definición de abajo
     this.loadWaitingList('BUSCANDO_CITA', 'MEDICINA_GENERAL');
   }
 
-  loadAppointments(): void {
-    const mockData: Appointment[] = [
-      { id: '1', label: 'Ahora', time: '10:00', patientName: 'Carlos Mendoza', appointmentType: 'Consulta General', status: 'En sala de espera' },
-      { id: '2', label: 'Hoy', time: '11:30', patientName: 'Ana Gómez S.', appointmentType: 'Revisión Exámenes', status: 'No ha llegado' }
-    ];
-    this.upcomingAppointments.set(mockData);
+  logout(): void {
+    this.authService.logout();
   }
 
-  handleCallToBox(appointmentId: string): void {
-    console.log(`Llamando a Box al paciente con ID: ${appointmentId}`);
+  private showSnackbar(message: string, type: 'success' | 'error' = 'success'): void {
+    if (this.snackbarTimer) clearTimeout(this.snackbarTimer);
+    this.snackbarMessage.set(message);
+    this.snackbarType.set(type);
+    this.snackbarVisible.set(true);
+    this.snackbarTimer = setTimeout(() => this.snackbarVisible.set(false), 3000);
   }
 
-  handleSavePatient(newData: any) {
-    this.patientService.createPatient(newData).subscribe({
-      next: (res: any) => {
-        alert('Paciente creado con éxito');
-        this.loadPatients();
-      },
-      error: (err: any) => alert('Error: Solo los médicos pueden realizar esta acción.')
-    });
-  }
-
-  loadPatients() {
-    console.log('Recargando lista de pacientes...');
-  }
-
-  // 🟢 DEFINICIÓN CORREGIDA: Ahora acepta dos argumentos para evitar el error "Expected 1 arguments"
-  loadWaitingList(estado: string, especialidad: string) {
+  loadWaitingList(estado: string, especialidad: string): void {
     this.selectedEspecialidad.set(especialidad);
     this.isLoadingList.set(true);
 
     this.waitingListService.getWaitingList(estado, especialidad).subscribe({
-      next: (data: any[]) => {
+      next: (data: SolicitudResponse[]) => {
         this.waitingPatients.set(data);
         this.isLoadingList.set(false);
       },
-      error: (err: any) => {
+      error: (err) => {
         console.error('Error al cargar la lista de espera', err);
         this.isLoadingList.set(false);
       }
     });
   }
 
-  // 🟢 Función unificada para gestionar solicitudes (Aceptar/Rechazar)
-  gestionarSolicitud(id: string, nuevoEstado: string) {
-    this.waitingListService.updateSolicitud(Number(id), { estado: nuevoEstado }).subscribe({
+  gestionarSolicitud(id: number, nuevoEstado: string): void {
+    this.actionError.set('');
+    this.waitingListService.updateSolicitud(id, { estado: nuevoEstado }).subscribe({
       next: () => {
-        alert(`Paciente ${nuevoEstado}`);
+        const msg = nuevoEstado === 'ACEPTADA' ? 'Ha aceptado la cita' : 'Ha rechazado la cita';
+        this.showSnackbar(msg, 'success');
         this.loadWaitingList('BUSCANDO_CITA', this.selectedEspecialidad());
       },
-      error: (err: any) => console.error('Error al actualizar:', err)
+      error: (err) => {
+        console.error('Error al actualizar:', err);
+        this.showSnackbar(`No se pudo actualizar la solicitud #${id}.`, 'error');
+      }
     });
   }
 }

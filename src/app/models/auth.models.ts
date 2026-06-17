@@ -1,22 +1,25 @@
-// Petición para Login
 export interface LoginRequest {
   username: string;
   password: string;
 }
 
-// Respuesta del Login (AuthController devuelve Map.of("token", jwtToken))
 export interface LoginResponse {
   token: string;
+  authId: number;
+  rol: string;
 }
 
-// Petición para Registro
 export interface RegisterRequest {
   username: string;
   password: string;
-  rol?: string; // Opcional, el backend asigna 'ROLE_PACIENTE' por defecto
+  rol?: string;
+  nombre?: string;
+  apellidos?: string;
+  rut?: string;
+  specialty?: string;
+  registroMedico?: string;
 }
 
-// Respuesta del Registro
 export interface RegisterResponse {
   mensaje: string;
   authId: number;

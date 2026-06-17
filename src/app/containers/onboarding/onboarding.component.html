@@ -1,0 +1,104 @@
+<div class="onboarding-wrapper">
+  <div class="onboarding-card">
+    <div class="card-header">
+      <div class="logo-pulse"></div>
+      <h1>Completa tu perfil</h1>
+      <p class="subtitle">
+        @if (isMedico()) { Configuración de cuenta médica }
+        @else { Configuración de cuenta paciente }
+      </p>
+    </div>
+
+    @if (submitError()) {
+      <div class="alert alert-error">{{ submitError() }}</div>
+    }
+
+    <!-- PACIENTE FORM -->
+    @if (!isMedico()) {
+      <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()" class="onboarding-form">
+        <div class="form-group">
+          <label>RUT <span class="hint">(ej: 12345678-9)</span></label>
+          <input formControlName="rut" type="text" placeholder="12345678-9" />
+          @if (pacienteForm.get('rut')?.invalid && pacienteForm.get('rut')?.touched) {
+            <span class="field-error">RUT inválido (formato: XXXXXXXX-X)</span>
+          }
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input formControlName="nombre" type="text" placeholder="Juan" />
+            @if (pacienteForm.get('nombre')?.invalid && pacienteForm.get('nombre')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input formControlName="apellido" type="text" placeholder="Pérez" />
+            @if (pacienteForm.get('apellido')?.invalid && pacienteForm.get('apellido')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Correo electrónico</label>
+          <input formControlName="email" type="email" placeholder="correo@ejemplo.com" />
+          @if (pacienteForm.get('email')?.invalid && pacienteForm.get('email')?.touched) {
+            <span class="field-error">Email inválido</span>
+          }
+        </div>
+        <button type="submit" class="btn-submit" [disabled]="isSubmitting()">
+          @if (isSubmitting()) { Guardando... } @else { Guardar perfil }
+        </button>
+      </form>
+    }
+
+    <!-- MEDICO FORM -->
+    @if (isMedico()) {
+      <form [formGroup]="medicoForm" (ngSubmit)="onSubmit()" class="onboarding-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input formControlName="nombre" type="text" placeholder="María" />
+            @if (medicoForm.get('nombre')?.invalid && medicoForm.get('nombre')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+          <div class="form-group">
+            <label>Apellidos</label>
+            <input formControlName="apellidos" type="text" placeholder="González Soto" />
+            @if (medicoForm.get('apellidos')?.invalid && medicoForm.get('apellidos')?.touched) {
+              <span class="field-error">Campo requerido</span>
+            }
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Especialidad</label>
+          <select formControlName="specialty">
+            <option value="">Seleccionar...</option>
+            <option value="MEDICINA_GENERAL">Medicina General</option>
+            <option value="CARDIOLOGIA">Cardiología</option>
+            <option value="NEUROLOGIA">Neurología</option>
+            <option value="PEDIATRIA">Pediatría</option>
+            <option value="TRAUMATOLOGIA">Traumatología</option>
+            <option value="GINECOLOGIA">Ginecología</option>
+            <option value="DERMATOLOGIA">Dermatología</option>
+            <option value="PSIQUIATRIA">Psiquiatría</option>
+          </select>
+          @if (medicoForm.get('specialty')?.invalid && medicoForm.get('specialty')?.touched) {
+            <span class="field-error">Seleccione una especialidad</span>
+          }
+        </div>
+        <div class="form-group">
+          <label>Registro Médico (SIS/Eunacom)</label>
+          <input formControlName="registroMedico" type="text" placeholder="RM-000000" />
+          @if (medicoForm.get('registroMedico')?.invalid && medicoForm.get('registroMedico')?.touched) {
+            <span class="field-error">Campo requerido</span>
+          }
+        </div>
+        <button type="submit" class="btn-submit" [disabled]="isSubmitting()">
+          @if (isSubmitting()) { Guardando... } @else { Guardar perfil médico }
+        </button>
+      </form>
+    }
+  </div>
+</div>

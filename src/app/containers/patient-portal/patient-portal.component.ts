@@ -1,17 +1,17 @@
 import { Component, ChangeDetectionStrategy, signal, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PatientProfileUiComponent } from '../../components/patient-profile-ui/patient-profile-ui.component';
-import { PatientService } from '../../core/services/patient.service'; 
+import { PatientService } from '../../core/services/patient.service';
 import { WaitingListService } from '../../core/services/waiting-list.service';
 import { RegistroSolicitud } from '../../models/waiting-list.models';
-
-// 🟢 1. Importamos la interfaz del paciente que creamos
-import { PacienteResponse } from '../../core/models/patient.models'; 
+import { PacienteResponse } from '../../core/models/patient.models';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-patient-portal',
   standalone: true,
-  imports: [CommonModule, PatientProfileUiComponent],
+  imports: [CommonModule, DatePipe, PatientProfileUiComponent, ReactiveFormsModule],
   templateUrl: './patient-portal.component.html',
   styleUrls: ['./patient-portal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -19,49 +19,89 @@ import { PacienteResponse } from '../../core/models/patient.models';
 export class PatientPortalComponent implements OnInit {
   private patientService = inject(PatientService);
   private waitingListService = inject(WaitingListService);
-  
-  // 🟢 2. Tipamos el signal (puede ser PacienteResponse o null mientras carga)
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+
   patientData = signal<PacienteResponse | null>(null);
+  notificaciones = signal<any[]>([]);
   isLoading = signal<boolean>(true);
+  showForm = signal<boolean>(false);
+  isSubmitting = signal<boolean>(false);
+  submitSuccess = signal<string>('');
+  submitError = signal<string>('');
+
+  citaForm: FormGroup = this.fb.group({
+    tipoSolicitud: ['MEDICINA_GENERAL', Validators.required],
+    gravedad: ['MEDIA', Validators.required]
+  });
 
   ngOnInit(): void {
     this.loadDataFromBff();
   }
 
-  loadDataFromBff(): void {
-    this.patientService.getPatientData().subscribe({
-      // 🟢 3. Reemplazamos 'any' por 'PacienteResponse'
-      next: (data: PacienteResponse) => {
+  loadDataFromBff() {
+    const authId = this.authService.getAuthId();
+
+    if (!authId) {
+      this.isLoading.set(false);
+      return;
+    }
+
+    this.patientService.obtenerPorAuthId(authId).subscribe({
+      next: (data) => {
         this.patientData.set(data);
         this.isLoading.set(false);
+        this.cargarNotificaciones(data.id);
       },
-      error: (err) => {
-        console.error('Error al conectar con el BFF:', err);
+      error: (err: any) => {
+        console.error('Error al cargar el perfil del paciente:', err);
+        this.patientData.set(null);
         this.isLoading.set(false);
       }
     });
   }
 
-  handleScheduleAppointment() {
-    const currentData = this.patientData();
-    // Como ya está tipado, TypeScript sabe que currentData tiene una propiedad 'id'
-    const idPaciente = currentData && currentData.id ? currentData.id : 1; 
+  logout(): void {
+    this.authService.logout();
+  }
 
+  cargarNotificaciones(pacienteId: number): void {
+    this.patientService.obtenerNotificaciones(pacienteId).subscribe({
+      next: (data) => this.notificaciones.set(data),
+      error: (err) => console.error('Error al cargar notificaciones:', err)
+    });
+  }
+
+  handleScheduleAppointment(): void {
+    this.showForm.update(v => !v);
+    this.submitSuccess.set('');
+    this.submitError.set('');
+  }
+
+  onSubmitCita(): void {
+    if (this.citaForm.invalid) return;
+
+    const idPaciente = this.patientData()?.id ?? 1;
     const nuevaSolicitud: RegistroSolicitud = {
       pacienteId: idPaciente,
-      tipoSolicitud: 'MEDICINA_GENERAL', 
-      gravedad: 'MEDIA'
+      tipoSolicitud: this.citaForm.value.tipoSolicitud,
+      gravedad: this.citaForm.value.gravedad
     };
 
-    console.log('Enviando solicitud a la lista de espera...', nuevaSolicitud);
+    this.isSubmitting.set(true);
+    this.submitError.set('');
 
     this.waitingListService.registrarSolicitud(nuevaSolicitud).subscribe({
       next: (response) => {
-        alert(`¡Éxito! Has sido ingresado a la lista de espera.\nID Solicitud: ${response.id}\nEstado: ${response.estado}`);
+        this.isSubmitting.set(false);
+        this.submitSuccess.set(`Solicitud enviada — ID: ${response.id} | Estado: ${response.estado}`);
+        this.showForm.set(false);
+        this.citaForm.reset({ tipoSolicitud: 'MEDICINA_GENERAL', gravedad: 'MEDIA' });
       },
       error: (err) => {
-        console.error('Error al registrar en lista de espera:', err);
-        alert('Ocurrió un error al intentar registrarte en la lista de espera. Inténtalo nuevamente.');
+        this.isSubmitting.set(false);
+        this.submitError.set('Error al registrar la solicitud. Intenta nuevamente.');
+        console.error(err);
       }
     });
   }

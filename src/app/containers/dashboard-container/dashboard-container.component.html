@@ -1,6 +1,127 @@
-<select class="neon-select" (change)="loadWaitingList('BUSCANDO_CITA', $any($event.target).value)">
-  <option value="MEDICINA_GENERAL">Medicina General</option>
-  <option value="CARDIOLOGIA">Cardiología</option>
-  <option value="PEDIATRIA">Pediatría</option>
-  <option value="TRAUMATOLOGIA">Traumatología</option>
-</select>
+<div class="doctor-dashboard">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-title">
+      <div class="header-avatar">
+        <span class="material-icons">stethoscope</span>
+      </div>
+      <div>
+        <h1>Panel Médico</h1>
+        <p>Bienvenido, <strong>{{ doctorName() }}</strong></p>
+      </div>
+    </div>
+
+    <button class="btn-logout" (click)="logout()" title="Cerrar sesión">
+      <span class="material-icons">logout</span>
+      Cerrar Sesión
+    </button>
+
+    <div class="header-filter">
+      <label for="especialidad-filter">
+        <span class="material-icons">filter_list</span>
+        Filtrar por especialidad
+      </label>
+      <select
+        id="especialidad-filter"
+        class="filter-select"
+        (change)="loadWaitingList('BUSCANDO_CITA', $any($event.target).value)">
+        <option value="MEDICINA_GENERAL">Medicina General</option>
+        <option value="CARDIOLOGIA">Cardiología</option>
+        <option value="PEDIATRIA">Pediatría</option>
+        <option value="TRAUMATOLOGIA">Traumatología</option>
+        <option value="NEUROLOGIA">Neurología</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Snackbar -->
+  @if (snackbarVisible()) {
+    <div class="snackbar" [class.snackbar--error]="snackbarType() === 'error'">
+      <span class="material-icons">{{ snackbarType() === 'success' ? 'check_circle' : 'error_outline' }}</span>
+      {{ snackbarMessage() }}
+    </div>
+  }
+
+  <!-- Tabla de solicitudes -->
+  <div class="patients-card">
+    <div class="patients-card__header">
+      <div class="header-label">
+        <span class="status-dot"></span>
+        Solicitudes Pendientes
+      </div>
+      <span class="count-badge">{{ waitingPatients().length }}</span>
+    </div>
+
+    @if (isLoadingList()) {
+      <div class="table-loading">
+        <span class="material-icons spin">sync</span>
+        Cargando solicitudes...
+      </div>
+    } @else if (waitingPatients().length === 0) {
+      <div class="empty-state">
+        <span class="material-icons">inbox</span>
+        <p>No hay solicitudes pendientes para esta especialidad.</p>
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table class="requests-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Paciente</th>
+              <th>Especialidad</th>
+              <th>Urgencia</th>
+              <th>Fecha</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (solicitud of waitingPatients(); track solicitud.id) {
+              <tr class="table-row">
+                <td class="col-id">#{{ solicitud.id }}</td>
+                <td class="col-patient">
+                  <div class="patient-cell">
+                    <span class="material-icons">account_circle</span>
+                    <div>
+                      <span class="patient-name">{{ solicitud.nombrePaciente || 'Paciente #' + solicitud.pacienteId }}</span>
+                      <span class="patient-rut">{{ solicitud.rutPaciente }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="col-specialty">{{ solicitud.tipoSolicitud | titlecase }}</td>
+                <td class="col-gravity">
+                  <span class="gravity-badge gravity-{{ solicitud.gravedad | lowercase }}">
+                    {{ solicitud.gravedad }}
+                  </span>
+                </td>
+                <td class="col-date">{{ solicitud.fechaSolicitud | date: 'dd/MM/yy HH:mm' }}</td>
+                <td class="col-status">
+                  <span class="status-pill">{{ solicitud.estado }}</span>
+                </td>
+                <td class="col-actions">
+                  <button
+                    class="btn-action btn-accept"
+                    (click)="gestionarSolicitud(solicitud.id, 'ACEPTADA')"
+                    title="Aceptar solicitud">
+                    <span class="material-icons">check_circle</span>
+                    Aceptar
+                  </button>
+                  <button
+                    class="btn-action btn-reject"
+                    (click)="gestionarSolicitud(solicitud.id, 'RECHAZADA')"
+                    title="Rechazar solicitud">
+                    <span class="material-icons">cancel</span>
+                    Rechazar
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+</div>

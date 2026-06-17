@@ -1,12 +1,110 @@
 <div class="portal-layout">
+
+  <div class="portal-topbar">
+    <button class="btn-logout" (click)="logout()" title="Cerrar sesión">
+      <span class="material-icons">logout</span>
+      Cerrar Sesión
+    </button>
+  </div>
+
   @if (isLoading()) {
-    <div class="loading-spinner">Cargando tu información de salud...</div>
+    <div class="portal-loading">
+      <span class="material-icons spin">sync</span>
+      Cargando tu información de salud...
+    </div>
   } @else if (patientData()) {
-    <app-patient-profile-ui 
-      [patient]="patientData()" 
+
+    <app-patient-profile-ui
+      [patient]="patientData()"
       (onSchedule)="handleScheduleAppointment()">
     </app-patient-profile-ui>
+
+    @if (notificaciones().length > 0) {
+      <div class="notificaciones-card">
+        <div class="notificaciones-card__header">
+          <span class="material-icons">notifications</span>
+          <h3>Notificaciones</h3>
+          <span class="badge">{{ notificaciones().length }}</span>
+        </div>
+        <ul class="notificaciones-lista">
+          @for (n of notificaciones(); track n.id) {
+            <li class="notificacion-item" [class.notificacion-item--leida]="n.leida">
+              <span class="material-icons notificacion-icon"
+                    [class.notificacion-icon--rechazada]="!n.mensaje.includes('aceptada')">
+                {{ n.mensaje.includes('aceptada') ? 'check_circle' : 'cancel' }}
+              </span>
+              <div class="notificacion-body">
+                <p class="notificacion-mensaje">{{ n.mensaje }}</p>
+                <span class="notificacion-fecha">{{ n.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    @if (submitSuccess()) {
+      <div class="alert-success">
+        <span class="material-icons">check_circle</span>
+        {{ submitSuccess() }}
+      </div>
+    }
+
+    @if (showForm()) {
+      <div class="form-card">
+        <div class="form-card__header">
+          <span class="material-icons">event_available</span>
+          <h3>Nueva Solicitud de Cita</h3>
+        </div>
+
+        <form [formGroup]="citaForm" (ngSubmit)="onSubmitCita()" class="cita-form">
+          <div class="form-row">
+            <div class="form-field">
+              <label for="especialidad">Especialidad médica</label>
+              <select id="especialidad" formControlName="tipoSolicitud">
+                <option value="MEDICINA_GENERAL">Medicina General</option>
+                <option value="CARDIOLOGIA">Cardiología</option>
+                <option value="PEDIATRIA">Pediatría</option>
+                <option value="TRAUMATOLOGIA">Traumatología</option>
+                <option value="NEUROLOGIA">Neurología</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="gravedad">Nivel de urgencia</label>
+              <select id="gravedad" formControlName="gravedad">
+                <option value="BAJA">Baja — Consulta de rutina</option>
+                <option value="MEDIA">Media — Requiere atención pronta</option>
+                <option value="ALTA">Alta — Urgente</option>
+              </select>
+            </div>
+          </div>
+
+          @if (submitError()) {
+            <p class="form-error">
+              <span class="material-icons">error_outline</span>
+              {{ submitError() }}
+            </p>
+          }
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="handleScheduleAppointment()">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-submit" [disabled]="isSubmitting()">
+              <span class="material-icons">{{ isSubmitting() ? 'hourglass_top' : 'send' }}</span>
+              {{ isSubmitting() ? 'Enviando...' : 'Confirmar Solicitud' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    }
+
   } @else {
-    <div class="error-msg">No se pudo cargar la información.</div>
+    <div class="portal-error">
+      <span class="material-icons">error_outline</span>
+      No se pudo cargar la información del paciente.
+    </div>
   }
+
 </div>

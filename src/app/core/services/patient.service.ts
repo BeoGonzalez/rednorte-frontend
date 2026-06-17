@@ -9,29 +9,22 @@ export class PatientService {
 
   // 🟢 Rutas relativas para que sean interceptadas por el proxy.conf.json
   // Asegúrate de que tu Gateway esté mapeando "/api/bff/**" correctamente
-  private bffUrl = '/api/bff/dashboard/patients';
   private apiPacientesUrl = '/api/pacientes';
 
-  // ==========================================
-  // MÉTODOS PARA EL BFF
-  // ==========================================
-  
-  getPatientData(): Observable<PacienteResponse> {
-    return this.http.get<PacienteResponse>(this.bffUrl);
-  }
-
-  // ==========================================
-  // MÉTODOS CRUD HACIA MS-PACIENTES DIRECTO
-  // ==========================================
-
-  // Obtener todos (Requiere ROLE_MEDICO o ROLE_PACIENTE)
   obtenerTodos(): Observable<PacienteResponse[]> {
     return this.http.get<PacienteResponse[]>(this.apiPacientesUrl);
   }
 
-  // Obtener por ID (Requiere ROLE_MEDICO o ROLE_PACIENTE)
   obtenerPorId(id: number): Observable<PacienteResponse> {
     return this.http.get<PacienteResponse>(`${this.apiPacientesUrl}/${id}`);
+  }
+
+  obtenerPorAuthId(authId: number): Observable<PacienteResponse> {
+    return this.http.get<PacienteResponse>(`${this.apiPacientesUrl}/auth/${authId}`);
+  }
+
+  obtenerNotificaciones(pacienteId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiPacientesUrl}/${pacienteId}/notificaciones`);
   }
 
   // Obtener por estado (Requiere ROLE_MEDICO)
