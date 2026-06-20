@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rednorte-frontend
+  namespace: rednorte
+  labels:
+    app: rednorte-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rednorte-frontend
+  template:
+    metadata:
+      labels:
+        app: rednorte-frontend
+    spec:
+      containers:
+        - name: rednorte-frontend
+          image: 174448597449.dkr.ecr.us-east-1.amazonaws.com/rednorte-frontend
+          ports:
+            # Por lo general, Angular dentro de Docker usa Nginx exponiendo el puerto 80
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rednorte-frontend-svc
+  namespace: rednorte
+spec:
+  # El tipo LoadBalancer es el que le pide a AWS EKS que genere la URL pública
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: rednorte-frontend
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rednorte-frontend-hpa
+  namespace: rednorte
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rednorte-frontend
+  minReplicas: 1
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
