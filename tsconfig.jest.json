@@ -1,0 +1,19 @@
+/* Configuración de TypeScript para la suite de Jest (tests *.jest.spec.ts). */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/jest",
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "jest",
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*.jest.spec.ts",
+    "src/**/*.d.ts",
+    "setup-jest.ts"
+  ]
+}

@@ -72,7 +72,29 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runner": "karma",
+            "browsers": ["Chrome"],
+            "tsConfig": "tsconfig.spec.json",
+            "include": ["src/**/*.spec.ts"],
+            "exclude": ["src/**/*.jest.spec.ts"],
+            "coverageReporters": ["text-summary", "html", "lcov"],
+            "coverageExclude": [
+              "src/environments/**",
+              "src/main.ts",
+              "**/*.model.ts",
+              "**/*.models.ts",
+              "**/*.routes.ts",
+              "**/*.config.ts"
+            ]
+          },
+          "configurations": {
+            "ci": {
+              "browsers": ["ChromeHeadless"],
+              "watch": false
+            }
+          }
         }
       }
     }

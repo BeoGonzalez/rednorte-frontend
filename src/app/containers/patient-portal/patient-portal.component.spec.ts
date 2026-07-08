@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
@@ -26,23 +25,32 @@ const mockNotificaciones = [
 describe('PatientPortalComponent', () => {
   let component: PatientPortalComponent;
 
-  const patientSpy = {
-    obtenerPorAuthId: vi.fn(),
-    obtenerNotificaciones: vi.fn(),
+  let patientSpy: {
+    obtenerPorAuthId: jasmine.Spy;
+    obtenerNotificaciones: jasmine.Spy;
   };
-  const waitingListSpy = {
-    registrarSolicitud: vi.fn(),
+  let waitingListSpy: {
+    registrarSolicitud: jasmine.Spy;
   };
-  const authSpy = {
-    getAuthId: vi.fn(),
-    logout: vi.fn(),
+  let authSpy: {
+    getAuthId: jasmine.Spy;
+    logout: jasmine.Spy;
   };
 
   beforeEach(async () => {
-    vi.clearAllMocks();
-    authSpy.getAuthId.mockReturnValue(10);
-    patientSpy.obtenerPorAuthId.mockReturnValue(of(mockPaciente));
-    patientSpy.obtenerNotificaciones.mockReturnValue(of(mockNotificaciones));
+    // Silencia los console.error esperados de las pruebas de ruta negativa.
+    spyOn(console, 'error');
+    patientSpy = {
+      obtenerPorAuthId: jasmine.createSpy('obtenerPorAuthId').and.returnValue(of(mockPaciente)),
+      obtenerNotificaciones: jasmine
+        .createSpy('obtenerNotificaciones')
+        .and.returnValue(of(mockNotificaciones)),
+    };
+    waitingListSpy = { registrarSolicitud: jasmine.createSpy('registrarSolicitud') };
+    authSpy = {
+      getAuthId: jasmine.createSpy('getAuthId').and.returnValue(10),
+      logout: jasmine.createSpy('logout'),
+    };
 
     await TestBed.configureTestingModule({
       imports: [PatientPortalComponent],
@@ -64,25 +72,25 @@ describe('PatientPortalComponent', () => {
       expect(patientSpy.obtenerPorAuthId).toHaveBeenCalledWith(10);
       expect(component.patientData()).toEqual(mockPaciente);
       expect(component.isLoading()).toBe(false);
-      expect(component.notificaciones()).toHaveLength(1);
+      expect(component.notificaciones().length).toBe(1);
     });
 
     it('debería detener loading inmediatamente si no hay authId', () => {
       // Given
-      authSpy.getAuthId.mockReturnValue(null);
+      authSpy.getAuthId.and.returnValue(null);
 
       // When
       component.loadDataFromBff();
 
       // Then
       expect(component.isLoading()).toBe(false);
-      expect(patientSpy.obtenerPorAuthId).toHaveBeenCalledOnce(); // solo del beforeEach
+      expect(patientSpy.obtenerPorAuthId).toHaveBeenCalledTimes(1); // solo del beforeEach
     });
 
     it('error HTTP — debería detener loading sin crashear', () => {
       // Given
-      authSpy.getAuthId.mockReturnValue(10);
-      patientSpy.obtenerPorAuthId.mockReturnValue(throwError(() => new Error('404')));
+      authSpy.getAuthId.and.returnValue(10);
+      patientSpy.obtenerPorAuthId.and.returnValue(throwError(() => new Error('404')));
 
       // When
       component.loadDataFromBff();
@@ -96,21 +104,21 @@ describe('PatientPortalComponent', () => {
   // ─── cargarNotificaciones ─────────────────────────────────
   describe('cargarNotificaciones()', () => {
     it('debería poblar la señal de notificaciones', () => {
-      patientSpy.obtenerNotificaciones.mockReturnValue(of(mockNotificaciones));
+      patientSpy.obtenerNotificaciones.and.returnValue(of(mockNotificaciones));
 
       component.cargarNotificaciones(1);
 
-      expect(component.notificaciones()).toHaveLength(1);
+      expect(component.notificaciones().length).toBe(1);
       expect(component.notificaciones()[0].mensaje).toBe('Su agenda ha sido aceptada');
     });
 
     it('error — no debería modificar notificaciones previas', () => {
-      patientSpy.obtenerNotificaciones.mockReturnValue(throwError(() => new Error('error')));
+      patientSpy.obtenerNotificaciones.and.returnValue(throwError(() => new Error('error')));
 
       component.cargarNotificaciones(1);
 
       // El signal se mantiene con el valor anterior (del beforeEach)
-      expect(component.notificaciones()).toHaveLength(1);
+      expect(component.notificaciones().length).toBe(1);
     });
   });
 
@@ -140,7 +148,7 @@ describe('PatientPortalComponent', () => {
       const mockResponse = { id: 99, estado: 'BUSCANDO_CITA', pacienteId: 1,
         tipoSolicitud: 'MEDICINA_GENERAL', gravedad: 'ALTA', fechaSolicitud: null,
         rutPaciente: '', nombrePaciente: '', doctorId: null };
-      waitingListSpy.registrarSolicitud.mockReturnValue(of(mockResponse));
+      waitingListSpy.registrarSolicitud.and.returnValue(of(mockResponse));
       component.showForm.set(true);
 
       // When
@@ -154,7 +162,7 @@ describe('PatientPortalComponent', () => {
 
     it('error — debería mostrar error y apagar isSubmitting', () => {
       // Given
-      waitingListSpy.registrarSolicitud.mockReturnValue(throwError(() => new Error('500')));
+      waitingListSpy.registrarSolicitud.and.returnValue(throwError(() => new Error('500')));
 
       // When
       component.onSubmitCita();
@@ -181,7 +189,7 @@ describe('PatientPortalComponent', () => {
   describe('logout()', () => {
     it('debería delegar en authService.logout()', () => {
       component.logout();
-      expect(authSpy.logout).toHaveBeenCalledOnce();
+      expect(authSpy.logout).toHaveBeenCalledTimes(1);
     });
   });
 });
