@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
@@ -9,10 +8,10 @@ import { AuthService } from './auth.service';
 describe('AuthService', () => {
   let service: AuthService;
   let httpMock: HttpTestingController;
-  const mockRouter = { navigate: vi.fn() };
+  let mockRouter: { navigate: jasmine.Spy };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockRouter = { navigate: jasmine.createSpy('navigate') };
     TestBed.configureTestingModule({
       providers: [
         AuthService,

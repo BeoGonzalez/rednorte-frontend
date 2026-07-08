@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
@@ -25,15 +24,20 @@ const mockSolicitudes: SolicitudResponse[] = [
 describe('DashboardContainerComponent', () => {
   let component: DashboardContainerComponent;
 
-  const waitingListSpy = {
-    getWaitingList: vi.fn(),
-    updateSolicitud: vi.fn(),
+  let waitingListSpy: {
+    getWaitingList: jasmine.Spy;
+    updateSolicitud: jasmine.Spy;
   };
-  const authSpy = { logout: vi.fn() };
+  let authSpy: { logout: jasmine.Spy };
 
   beforeEach(async () => {
-    vi.clearAllMocks();
-    waitingListSpy.getWaitingList.mockReturnValue(of(mockSolicitudes));
+    // Silencia los console.error esperados de las pruebas de ruta negativa.
+    spyOn(console, 'error');
+    waitingListSpy = {
+      getWaitingList: jasmine.createSpy('getWaitingList').and.returnValue(of(mockSolicitudes)),
+      updateSolicitud: jasmine.createSpy('updateSolicitud'),
+    };
+    authSpy = { logout: jasmine.createSpy('logout') };
 
     await TestBed.configureTestingModule({
       imports: [DashboardContainerComponent],
@@ -53,7 +57,7 @@ describe('DashboardContainerComponent', () => {
   describe('ngOnInit()', () => {
     it('debería cargar la lista con estado BUSCANDO_CITA y especialidad por defecto', () => {
       expect(waitingListSpy.getWaitingList).toHaveBeenCalledWith('BUSCANDO_CITA', 'MEDICINA_GENERAL');
-      expect(component.waitingPatients()).toHaveLength(1);
+      expect(component.waitingPatients().length).toBe(1);
       expect(component.isLoadingList()).toBe(false);
     });
   });
@@ -62,20 +66,20 @@ describe('DashboardContainerComponent', () => {
   describe('loadWaitingList()', () => {
     it('debería actualizar waitingPatients y apagar el loading al éxito', () => {
       // Given
-      waitingListSpy.getWaitingList.mockReturnValue(of(mockSolicitudes));
+      waitingListSpy.getWaitingList.and.returnValue(of(mockSolicitudes));
 
       // When
       component.loadWaitingList('BUSCANDO_CITA', 'CARDIOLOGIA');
 
       // Then
       expect(component.selectedEspecialidad()).toBe('CARDIOLOGIA');
-      expect(component.waitingPatients()).toHaveLength(1);
+      expect(component.waitingPatients().length).toBe(1);
       expect(component.isLoadingList()).toBe(false);
     });
 
     it('debería apagar el loading aunque el HTTP falle', () => {
       // Given
-      waitingListSpy.getWaitingList.mockReturnValue(throwError(() => new Error('timeout')));
+      waitingListSpy.getWaitingList.and.returnValue(throwError(() => new Error('timeout')));
 
       // When
       component.loadWaitingList('BUSCANDO_CITA', 'PEDIATRIA');
@@ -89,8 +93,8 @@ describe('DashboardContainerComponent', () => {
   describe('gestionarSolicitud()', () => {
     it('ACEPTADA — debería mostrar snackbar de éxito y recargar lista', () => {
       // Given
-      waitingListSpy.updateSolicitud = vi.fn().mockReturnValue(of({}));
-      waitingListSpy.getWaitingList.mockReturnValue(of([]));
+      waitingListSpy.updateSolicitud.and.returnValue(of({}));
+      waitingListSpy.getWaitingList.and.returnValue(of([]));
 
       // When
       component.gestionarSolicitud(1, 'ACEPTADA');
@@ -104,8 +108,8 @@ describe('DashboardContainerComponent', () => {
 
     it('RECHAZADA — debería mostrar mensaje de rechazo', () => {
       // Given
-      waitingListSpy.updateSolicitud = vi.fn().mockReturnValue(of({}));
-      waitingListSpy.getWaitingList.mockReturnValue(of([]));
+      waitingListSpy.updateSolicitud.and.returnValue(of({}));
+      waitingListSpy.getWaitingList.and.returnValue(of([]));
 
       // When
       component.gestionarSolicitud(2, 'RECHAZADA');
@@ -116,7 +120,7 @@ describe('DashboardContainerComponent', () => {
 
     it('Error HTTP — debería mostrar snackbar de error', () => {
       // Given
-      waitingListSpy.updateSolicitud = vi.fn().mockReturnValue(throwError(() => new Error('500')));
+      waitingListSpy.updateSolicitud.and.returnValue(throwError(() => new Error('500')));
 
       // When
       component.gestionarSolicitud(3, 'ACEPTADA');
@@ -132,7 +136,7 @@ describe('DashboardContainerComponent', () => {
   describe('logout()', () => {
     it('debería delegar en authService.logout()', () => {
       component.logout();
-      expect(authSpy.logout).toHaveBeenCalledOnce();
+      expect(authSpy.logout).toHaveBeenCalledTimes(1);
     });
   });
 });

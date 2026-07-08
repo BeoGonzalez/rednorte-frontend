@@ -1,4 +1,3 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
@@ -63,7 +62,7 @@ describe('PatientService', () => {
       const notifs = [{ id: 1, pacienteId: 1, mensaje: 'Aceptada', leida: false, fechaCreacion: null }];
 
       service.obtenerNotificaciones(1).subscribe(data => {
-        expect(data).toHaveLength(1);
+        expect(data.length).toBe(1);
         expect(data[0].mensaje).toBe('Aceptada');
       });
 
@@ -86,7 +85,7 @@ describe('PatientService', () => {
   // ─── obtenerTodos ─────────────────────────────────────────
   describe('obtenerTodos()', () => {
     it('debería hacer GET /api/pacientes', () => {
-      service.obtenerTodos().subscribe(list => expect(list).toHaveLength(1));
+      service.obtenerTodos().subscribe(list => expect(list.length).toBe(1));
 
       const req = httpMock.expectOne('/api/pacientes');
       expect(req.request.method).toBe('GET');
